@@ -42,12 +42,12 @@ gfx ()
 	case "$1" in
 
 		ok)
-			echo -e "                         "$WHITE"[  "$GREEN"OK"$WHITE"  ]$DEF"
+			echo -e ""$WHITE"[ "$LIGHTGREEN"OK"$WHITE" ]"$DEF""
 				echo
 				;;	
 			
 		failed)
-		        echo -e "                         "$WHITE"["$RED"FAILED"$WHITE"]$DEF"
+		        echo -e ""$LIGHTRED"ERROR!"$DEF""
 				echo
 				;;
 		
@@ -87,6 +87,8 @@ gfx ()
 			echo -e ""$RED" |__/|__/_/  |_/_/  \____/_/ /_/_____/\____/\____/   "$YELLOW"/_//____/____/ /_/"$DEF""
 			echo
 			echo -e "$BLUE""///"$GREEN" Watching over "$DEF"cjnet.lan"$GREEN" from "$DEF""$HOSTNAME" "$BLUE"/// "$GREEN"`date`"
+			echo
+			echo
 			echo
 			;;
 		arrow)
@@ -137,4 +139,30 @@ timeupdate()
 	HOUR=$(date +"%H")
 	MINUTE=$(date +"%M")
 	SEC=$(date +"%S")
+}
+interpethosts()
+{
+	# Converts $HOST# into $HOSTNAME#, $HOSTLOC#, $HOSTIP#
+	NUM="1"
+	for HOSTENTRY in `cat hosts.lst`;
+	do
+		HOSTNAME$NUM=`echo $HOSTENTRY | cut -d: -f1`
+		HOSTLOC$NUM=`echo $HOSTENTRY | cut -d: -f2`
+		HOSTIP$NUM=`echo $HOSTENTRY | cut -d: -f3`
+
+	NUM="$NUM"+1
+	printenv
+	done
+}
+displaystatus()
+{
+	#Is wactchdogd.sh running?
+	#Reads timestamp.tmp
+	echo -e "Status reported at `cat timestamp.tmp`:"
+	echo -e ""$CYAN"NAME           LOCATION             IP               LATENCY             STATUS"$DEF""
+
+# Sample output
+# Status reported Tue Nov  6 23:19:18 WEST 2012:
+# NAME           LOCATION             IP               LATENCY             STATUS
+# EVANGELION     Scene                192.168.243.123  2ms                 ERROR!
 }

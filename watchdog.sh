@@ -8,7 +8,10 @@ APPVERSION=0.1
 clear
 echo Loading library..
 source watchdoglib.sh
+echo Loading configuration and hostlist..
+source settings.cfg
 
 gfx splash
 timeupdate
 gfx header
+interpethosts
