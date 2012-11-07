@@ -9,8 +9,8 @@ LIGHTBLUE="\x1b[34;01m"
 BLUE="\x1b[34;11m"
 LIGHTCYAN="\x1b[36;01m"
 CYAN="\x1b[36;11m"
-LIGHTGRAY="\x1b[37;11m"
-GRAY="\x1b[37;01m"
+LIGHTGRAY="\x1b[37;01m"
+GRAY="\x1b[37;11m"
 LIGHTGREEN="\x1b[32;01m"
 GREEN="\x1b[32;11m"
 LIGHTPURPLE="\x1b[35;01m"
@@ -61,7 +61,6 @@ gfx ()
 			echo
 			echo
 			echo
-			echo
 			echo -e ""$RED"    _       _____  ______________  ______  ____  ______"$YELLOW"    __________________"$DEF""
 			echo -e ""$RED"   | |     / /   |/_  __/ ____/ / / / __ \/ __ \/ ____/ "$YELLOW"  <  /__  /__  /__  /"$DEF""
 			echo -e ""$LIGHTRED"   | | /| / / /| | / / / /   / /_/ / / / / / / / / __  "$LIGHTYELLOW"   / / /_ < /_ <  / /"$DEF""
@@ -75,7 +74,7 @@ gfx ()
 			;;
 		
 		line)
-			echo -e "$RED------------------------------$DEF"
+			echo -e "$RED--------------------------------------------------------------------------------$DEF"
 			;;
 
 		header)
@@ -86,14 +85,13 @@ gfx ()
 			echo -e ""$RED" | |/ |/ / ___ |/ / / /___/ __  / /_/ / /_/ / /_/ /  "$YELLOW" / /___/ /__/ / / /"$DEF""
 			echo -e ""$RED" |__/|__/_/  |_/_/  \____/_/ /_/_____/\____/\____/   "$YELLOW"/_//____/____/ /_/"$DEF""
 			echo
-			echo -e "$BLUE""///"$GREEN" Watching "$DEF"cjnet.lan"$GREEN" from "$DEF""`hostname -s`" "$BLUE"/// "$GREEN"`date`"
-			echo
+			timeupdate
+			echo -e "$RED""///"$DEF" Watching "$YELLOW"`hostname -d`"$DEF" from "$YELLOW""`hostname -s`" "$RED"/// "$DEF"CPU Usage: `top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%\id.*/\1/" | awk '{print 100 - $1"%"}'`"$RED" ///"$DEF" Time: $HM"
 			echo
 			echo
 			;;
 		arrow)
 			echo -e "$RED""--""$YELLOW""> ""$DEF""$2"
-			echo
 			;;
 		subarrow)
 			echo -e "$RED""----""$YELLOW""> ""$DEF""$2"
@@ -146,7 +144,8 @@ pinghosts()
 	X=0
 	Y=10
 
-	echo -e ""$LIGHTCYAN"NAME           LOCATION             IP                LATENCY            STATUS"$DEF""
+	echo -e ""$LIGHTYELLOW"NAME           LOCATION             IP                AVG.LATENCY        STATUS"$DEF""
+	gfx line
 	while read -r HOSTENTRY
 	do
 		Y=$(( Y + 1 ))
@@ -154,16 +153,19 @@ pinghosts()
 		HOSTLOC=`echo $HOSTENTRY | awk -F":" '{print $2}' $2`
 		HOSTIP=`echo $HOSTENTRY | awk -F":" '{print $3}' $2`
 		#echo YOLO $HOSTENTRY BRO $HOSTDESC $HOSTLOC $HOSTIP $Y
-		HOSTLAT=`ping -q -c 3 -n -i 0.2 -W1 $HOSTIP | tail -1| awk '{print $4}' | cut -d '/' -f 2`
-		HOSTLAT="$HOSTLAT ms"
 
-		echo -e "$HOSTDESC"
+		echo -e ""$GRAY"$HOSTDESC"
 		upforward 14
 		echo -e " $HOSTLOC"
 		upforward 35
 		echo -e " $HOSTIP"
 		upforward 53
-		echo -e " $HOSTLAT"
+		echo -e " "$DEF"[   "$LIGHTYELLOW"Ping in progress..  "$DEF"]"$GRAY""
+		HOSTLAT=`ping -q -c 3 -n -i 0.2 -W1 $HOSTIP | tail -1| awk '{print $4}' | cut -d '/' -f 2`
+		HOSTLAT="$HOSTLAT ms"
+		upforward 53
+		tput el
+		echo -e " $HOSTLAT"$DEF""
 		upforward 63
 		echo -e "          [ "$LIGHTGREEN"OK"$DEF" ]"
 	done < hosts.lst
@@ -174,15 +176,18 @@ upforward()
 	#
 	tput cup $Y $1
 }
-displaystatus()
+summarynext()
 {
-	#Is wactchdogd.sh running?
-	#Reads timestamp.tmp
-	echo -e "Status reported at `cat timestamp.tmp`:"
-	echo -e ""$CYAN"NAME           LOCATION             IP               LATENCY             STATUS"$DEF""
+echo
+echo -e "$RED""///"$LIGHTGRAY" Last update: `date`"$DEF""
+tput sc
+COUNTDOWN=$REFRESHRATE
+until [ $COUNTDOWN == 0 ]; do
+gfx arrow "Next check is scheduled in "$LIGHTYELLOW"$COUNTDOWN "$DEF"second(s).    (Press [CTRL+C] to exit..)"
+sleep 1
+COUNTDOWN=$(( COUNTDOWN - 1 ))
+tput rc
+tput el
+done
 
-# Sample output
-# Status reported Tue Nov  6 23:19:18 WEST 2012:
-NAME           LOCATION             IP                LATENCY            STATUS
-EVANGELION     Scene                192.168.243.123   2ms                ERROR!
 }
