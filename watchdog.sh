@@ -14,4 +14,4 @@ source settings.cfg
 gfx splash
 timeupdate
 gfx header
-interpethosts
+pinghosts

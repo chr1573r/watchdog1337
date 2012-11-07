@@ -86,7 +86,7 @@ gfx ()
 			echo -e ""$RED" | |/ |/ / ___ |/ / / /___/ __  / /_/ / /_/ / /_/ /  "$YELLOW" / /___/ /__/ / / /"$DEF""
 			echo -e ""$RED" |__/|__/_/  |_/_/  \____/_/ /_/_____/\____/\____/   "$YELLOW"/_//____/____/ /_/"$DEF""
 			echo
-			echo -e "$BLUE""///"$GREEN" Watching over "$DEF"cjnet.lan"$GREEN" from "$DEF""$HOSTNAME" "$BLUE"/// "$GREEN"`date`"
+			echo -e "$BLUE""///"$GREEN" Watching "$DEF"cjnet.lan"$GREEN" from "$DEF""`hostname -s`" "$BLUE"/// "$GREEN"`date`"
 			echo
 			echo
 			echo
@@ -140,19 +140,39 @@ timeupdate()
 	MINUTE=$(date +"%M")
 	SEC=$(date +"%S")
 }
-interpethosts()
+pinghosts()
 {
 	# Converts $HOST# into $HOSTNAME#, $HOSTLOC#, $HOSTIP#
-	NUM="1"
-	for HOSTENTRY in `cat hosts.lst`;
-	do
-		HOSTNAME$NUM=`echo $HOSTENTRY | cut -d: -f1`
-		HOSTLOC$NUM=`echo $HOSTENTRY | cut -d: -f2`
-		HOSTIP$NUM=`echo $HOSTENTRY | cut -d: -f3`
+	X=0
+	Y=10
 
-	NUM="$NUM"+1
-	printenv
-	done
+	echo -e ""$LIGHTCYAN"NAME           LOCATION             IP                LATENCY            STATUS"$DEF""
+	while read -r HOSTENTRY
+	do
+		Y=$(( Y + 1 ))
+		HOSTDESC=`echo $HOSTENTRY | awk -F":" '{print $1}' $2`
+		HOSTLOC=`echo $HOSTENTRY | awk -F":" '{print $2}' $2`
+		HOSTIP=`echo $HOSTENTRY | awk -F":" '{print $3}' $2`
+		#echo YOLO $HOSTENTRY BRO $HOSTDESC $HOSTLOC $HOSTIP $Y
+		HOSTLAT=`ping -q -c 3 -n -i 0.2 -W1 $HOSTIP | tail -1| awk '{print $4}' | cut -d '/' -f 2`
+		HOSTLAT="$HOSTLAT ms"
+
+		echo -e "$HOSTDESC"
+		upforward 14
+		echo -e " $HOSTLOC"
+		upforward 35
+		echo -e " $HOSTIP"
+		upforward 53
+		echo -e " $HOSTLAT"
+		upforward 63
+		echo -e "          [ "$LIGHTGREEN"OK"$DEF" ]"
+	done < hosts.lst
+}
+
+upforward()
+{
+	#
+	tput cup $Y $1
 }
 displaystatus()
 {
@@ -163,6 +183,6 @@ displaystatus()
 
 # Sample output
 # Status reported Tue Nov  6 23:19:18 WEST 2012:
-# NAME           LOCATION             IP               LATENCY             STATUS
-# EVANGELION     Scene                192.168.243.123  2ms                 ERROR!
+NAME           LOCATION             IP                LATENCY            STATUS
+EVANGELION     Scene                192.168.243.123   2ms                ERROR!
 }
