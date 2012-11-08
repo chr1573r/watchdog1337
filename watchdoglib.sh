@@ -189,7 +189,7 @@ echo -e "$RED""///"$LIGHTGRAY" Last update: `date`"$DEF""
 tput sc
 COUNTDOWN=$REFRESHRATE
 until [ $COUNTDOWN == 0 ]; do
-gfx arrow "Next check is scheduled in "$LIGHTYELLOW"$COUNTDOWN "$DEF"second(s).    (Press [CTRL+C] to exit..)"
+gfx arrow "Next check is scheduled in "$LIGHTYELLOW"$COUNTDOWN "$WHITE"second(s).    (Press [CTRL+C] to exit..)"$DEF""
 sleep 1
 COUNTDOWN=$(( COUNTDOWN - 1 ))
 tput rc
