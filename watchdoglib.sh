@@ -152,21 +152,20 @@ pinghosts()
 	while read -r HOSTENTRY
 	do
 		Y=$(( Y + 1 ))
-		if [ $FIRSTDRAW == YES ]; then
+		
 		HOSTDESC=`echo $HOSTENTRY | awk -F":" '{print $1}' $2`
 		HOSTLOC=`echo $HOSTENTRY | awk -F":" '{print $2}' $2`
 		HOSTIP=`echo $HOSTENTRY | awk -F":" '{print $3}' $2`
 		#echo YOLO $HOSTENTRY BRO $HOSTDESC $HOSTLOC $HOSTIP $Y
-
+		if [ $FIRSTDRAW = YES ] ; then
 		echo -e ""$GRAY"$HOSTDESC"
 		upforward 14
 		echo -e " $HOSTLOC"
 		upforward 35
 		echo -e " $HOSTIP"
-		upforward 53
-		FIRSTDRAW=NO
 		fi
 		#if [ $FIRSTDRAW == NO ]; then fi
+		upforward 53	
 		echo -e " "$DEF"[   "$LIGHTYELLOW"Ping in progress..  "$DEF"]"$GRAY""
 		HOSTLAT=`ping -q -c 3 -n -i 0.2 -W1 $HOSTIP | tail -1| awk '{print $4}' | cut -d '/' -f 2`
 		HOSTLAT="$HOSTLAT ms"
@@ -176,6 +175,7 @@ pinghosts()
 		upforward 63
 		echo -e "          [ "$LIGHTGREEN"OK"$DEF" ]"
 	done < hosts.lst
+	FIRSTDRAW=NO
 }
 
 upforward()
