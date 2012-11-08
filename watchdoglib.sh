@@ -94,10 +94,10 @@ gfx ()
 			echo
 			;;
 		arrow)
-			echo -e "$RED""--""$YELLOW""> ""$DEF""$2"
+			echo -e "$RED""--""$YELLOW""> ""$WHITE""$2"$DEF""
 			;;
 		subarrow)
-			echo -e "$RED""----""$YELLOW""> ""$DEF""$2"
+			echo -e "$RED""----""$YELLOW""> ""$DEF""$2"$DEF""
 			;;
 		fuarrow)
 			echo -e "$APPNAME"":"$CYAN"$2"$YELLOW"> "$DEF"$3"
