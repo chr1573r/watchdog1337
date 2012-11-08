@@ -89,7 +89,7 @@ gfx ()
 		subheader)
 			timeupdate
 			tput cup 6 0
-			echo -e "$RED""///"$DEF" Watching "$YELLOW"`hostname -d`"$DEF" from "$YELLOW""`hostname -s`" "$RED"/// "$DEF"CPU Usage: `top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%\id.*/\1/" | awk '{print 100 - $1"%"}'`"$RED" ///"$DEF" Time: $HM"
+			echo -e "$RED""///"$GRAY" Watching "$YELLOW"`hostname -d`"$GRAY" from "$YELLOW""`hostname -s`" "$RED"/// "$GRAY"CPU Usage: `top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%\id.*/\1/" | awk '{print 100 - $1"%"}'`"$RED" ///"$GRAY" Time: $HM"$DEF""
 			echo
 			echo
 			;;
