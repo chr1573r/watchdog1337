@@ -144,7 +144,7 @@ pinghosts()
 	X=0
 	Y=10
 
-	echo -e ""$LIGHTYELLOW"NAME           LOCATION             IP                AVG.LATENCY        STATUS"$DEF""
+	echo -e ""$LIGHTYELLOW"NAME           LOCATION             ADDRESS           AVG.LATENCY        STATUS"$DEF""
 	gfx line
 	while read -r HOSTENTRY
 	do
