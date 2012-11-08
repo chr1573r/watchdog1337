@@ -166,7 +166,7 @@ pinghosts()
 		upforward 53
 		FIRSTDRAW=NO
 		fi
-		if [ $FIRSTDRAW == NO ]; then; fi
+		if [ $FIRSTDRAW == NO ]; then fi
 		echo -e " "$DEF"[   "$LIGHTYELLOW"Ping in progress..  "$DEF"]"$GRAY""
 		HOSTLAT=`ping -q -c 3 -n -i 0.2 -W1 $HOSTIP | tail -1| awk '{print $4}' | cut -d '/' -f 2`
 		HOSTLAT="$HOSTLAT ms"
