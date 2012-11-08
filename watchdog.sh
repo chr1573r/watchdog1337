@@ -4,6 +4,7 @@
 
 # Variables
 APPVERSION=0.1
+FIRSTDRAW=YES
 clear
 echo Loading library..
 source watchdoglib.sh
@@ -18,5 +19,6 @@ while true
 do
 gfx subheader
 pinghosts
+FIRSTDRAW=NO
 summarynext
 done

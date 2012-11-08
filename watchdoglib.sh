@@ -175,7 +175,6 @@ pinghosts()
 		upforward 63
 		echo -e "          [ "$LIGHTGREEN"OK"$DEF" ]"
 	done < hosts.lst
-	FIRSTDRAW=NO
 }
 
 upforward()
