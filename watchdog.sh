@@ -4,7 +4,6 @@
 
 # Variables
 APPVERSION=0.1
-
 clear
 echo Loading library..
 source watchdoglib.sh
@@ -13,10 +12,11 @@ source settings.cfg
 
 gfx splash
 
+gfx header
+
 while true
 do
-timeupdate
-gfx header
+gfx subheader
 pinghosts
 summarynext
 done

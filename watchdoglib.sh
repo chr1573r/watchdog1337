@@ -85,7 +85,10 @@ gfx ()
 			echo -e ""$RED" | |/ |/ / ___ |/ / / /___/ __  / /_/ / /_/ / /_/ /  "$YELLOW" / /___/ /__/ / / /"$DEF""
 			echo -e ""$RED" |__/|__/_/  |_/_/  \____/_/ /_/_____/\____/\____/   "$YELLOW"/_//____/____/ /_/"$DEF""
 			echo
+			;;
+		subheader)
 			timeupdate
+			tput cup 7 0
 			echo -e "$RED""///"$DEF" Watching "$YELLOW"`hostname -d`"$DEF" from "$YELLOW""`hostname -s`" "$RED"/// "$DEF"CPU Usage: `top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%\id.*/\1/" | awk '{print 100 - $1"%"}'`"$RED" ///"$DEF" Time: $HM"
 			echo
 			echo
