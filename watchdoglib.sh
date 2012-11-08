@@ -157,7 +157,7 @@ pinghosts()
 		HOSTLOC=`echo $HOSTENTRY | awk -F":" '{print $2}' $2`
 		HOSTIP=`echo $HOSTENTRY | awk -F":" '{print $3}' $2`
 		#echo YOLO $HOSTENTRY BRO $HOSTDESC $HOSTLOC $HOSTIP $Y
-		if [ $FIRSTDRAW = YES ] ; then
+		if [ "$FIRSTDRAW" == "YES" ] ; then
 		echo -e ""$GRAY"$HOSTDESC"
 		upforward 14
 		echo -e " $HOSTLOC"
