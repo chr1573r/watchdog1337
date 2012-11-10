@@ -147,8 +147,8 @@ pinghosts()
 	X=0
 	Y=10
 	HOSTS=0
-	OKHOSTS=0
-	DOWNHOSTS=0
+	HOSTSOK=0
+	HOSTSDOWN=0
 
 	if [ "$REDRAW" == "YES" ] ; then echo -e ""$LIGHTYELLOW"NAME           LOCATION             ADDRESS           AVG.LATENCY        STATUS"$DEF""; gfx line; fi
 	while read -r HOSTENTRY
@@ -161,6 +161,8 @@ pinghosts()
 			HOSTIP=`echo $HOSTENTRY | awk -F":" '{print $3}' $2`
 			#echo YOLO $HOSTENTRY BRO $HOSTDESC $HOSTLOC $HOSTIP $Y
 			if [ "$REDRAW" == "YES" ] ; then
+				echo "                                                                               "
+				upforward 0
 				echo -e ""$GRAY"$HOSTDESC"
 				upforward 14
 				echo -e " "$GRAY"$HOSTLOC"
@@ -198,7 +200,7 @@ pinghosts()
 					upforward 53
 					echo -e " "$LIGHTRED"Ping exitcode: $PINGCODE"
 					upforward 70
-					echo -e "   "$WHITE"["$LIGHTYELLOW""$LIGHTRED"DOWN"$LIGHTRED"] "$DEF""
+					echo -e "   "$LIGHTGRAY"["$LIGHTYELLOW""$LIGHTRED"DOWN"$LIGHTGRAY"] "$DEF""
 					HOSTSDOWN=$(( HOSTSDOWN + 1))
 				fi
 		done < hosts.lst
@@ -214,15 +216,15 @@ summarynext()
 {
 	echo
 	if [ "$HOSTSOK" == "$HOSTS" ] ; then
-		echo -e "$RED""///"$GRAY"SUMMARY: $HOSTSOK "$DEF"of "$LIGHTGRAY"$HOSTS"$DEF" hosts are "$LIGHTGREEN" up"$DEF" "
+		echo -e "$RED""///"$GRAY"SUMMARY: "$LIGHTGRAY"$HOSTSOK "$DEF"of "$LIGHTGRAY"$HOSTS"$DEF" hosts are "$LIGHTGREEN" up"$DEF" "
 	else
-		echo -e "$RED""///"$GRAY"SUMMARY: $HOSTSDOWN "$DEF"of "$LIGHTGRAY"$HOSTS"$DEF" hosts are "$LIGHTRED" down"$DEF" "
+		echo -e "$RED""///"$GRAY"SUMMARY: "$LIGHTGRAY"$HOSTSDOWN "$DEF"of "$LIGHTGRAY"$HOSTS"$DEF" hosts are "$LIGHTRED" down"$DEF" "
 	fi
 	tput sc
 	COUNTDOWN=$REFRESHRATE
 	COUNTERWITHINACOUNTER=10 			#yodawg
 	until [ $COUNTDOWN == 0 ]; do
-		gfx arrow ""$GRAY" Updated: `date`"$DEF"." "Next refresh: "$LIGHTYELLOW"$COUNTDOWN "$WHITE"second(s).    ([CTRL+C] to exit..)"$DEF""
+		gfx arrow ""$GRAY" Updated: `date`"$DEF". Next refresh: "$LIGHTYELLOW"$COUNTDOWN "$GRAY"second(s).    ([CTRL+C] to exit..)$DEF"
 		sleep 1
 		if [ $COUNTERWITHINACOUNTER == 0 ]; then gfx subheader; COUNTERWITHINACOUNTER=10; fi
 		COUNTDOWN=$(( COUNTDOWN - 1 ))
