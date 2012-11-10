@@ -182,7 +182,7 @@ pinghosts()
 				tput setab 1
 				tput setaf 7
 				upforward 0
-				echo "                                                                                "
+				echo "                                                                               "
 				upforward 0
 				echo -e "$HOSTDESC"
 				upforward 14
@@ -190,9 +190,9 @@ pinghosts()
 				upforward 35
 				echo -e " $HOSTIP"
 				upforward 53
-				echo -e " Error:$PINGCODE"
+				echo -e " Ping exitcode:$PINGCODE"
 				upforward 73
-				echo -e "["$LIGHTYELLOW"DOWN"$DEF"]"
+				echo -e "["$LIGHTYELLOW"DOWN]"$DEF""
 			fi
 		done < hosts.lst
 }
