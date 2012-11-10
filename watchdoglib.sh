@@ -217,7 +217,7 @@ summarynext()
 {
 	echo
 	if [ "$HOSTSOK" == "$HOSTS" ] ; then
-		echo -e "$RED""///"$GRAY" SUMMARY @ $HMS: "$LIGHTGRAY"$HOSTSOK "$DEF"of "$LIGHTGRAY"$HOSTS"$DEF" hosts are "$LIGHTGREEN"UP"$DEF" "
+		echo -e "$RED""///"$CYAN" SUMMARY @ $HMS: "$LIGHTGRAY"$HOSTSOK "$DEF"of "$LIGHTGRAY"$HOSTS"$DEF" hosts are "$LIGHTGREEN"UP"$DEF" "
 	else
 		echo -e "$RED""///"$GRAY" SUMMARY @ $HMS: "$LIGHTGRAY"$HOSTSDOWN "$DEF"of "$LIGHTGRAY"$HOSTS"$DEF" hosts are "$LIGHTRED"DOWN"$DEF" "
 	fi
@@ -225,7 +225,7 @@ summarynext()
 	COUNTDOWN=$REFRESHRATE
 	COUNTERWITHINACOUNTER=10 			#yodawg
 	until [ $COUNTDOWN == 0 ]; do
-		gfx arrow ""$GRAY"Next refresh: "$LIGHTYELLOW"$COUNTDOWN "$GRAY"second(s).   ([CTRL+C] to exit..)$DEF"
+		gfx arrow ""$GRAY"Next refresh: "$LIGHTYELLOW"$COUNTDOWN "$GRAY"second(s).   ([CTRL+C] to exit..)"$DEF""
 		sleep 1
 		if [ $COUNTERWITHINACOUNTER == 0 ]; then gfx subheader; COUNTERWITHINACOUNTER=10; fi
 		COUNTDOWN=$(( COUNTDOWN - 1 ))
