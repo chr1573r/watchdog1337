@@ -162,6 +162,13 @@ pinghosts()
 				echo -e " $HOSTLOC"
 				upforward 35
 				echo -e " $HOSTIP"
+			elif [ "$REDRAW" == "YES" ] ; then
+				echo -e ""$GRAY"$HOSTDESC"
+				upforward 14
+				echo -e " $HOSTLOC"
+				upforward 35
+				echo -e " $HOSTIP"
+				REDRAW=NO
 			fi
 			upforward 53	
 			echo -e " "$DEF"[   "$LIGHTYELLOW"Ping in progress..  "$DEF"]"$GRAY""
@@ -192,8 +199,8 @@ pinghosts()
 					upforward 53
 					echo -e " "$LIGHTRED"Ping exitcode: $PINGCODE"
 					upforward 70
-					echo -e "   "$WHITE"["$LIGHTYELLOW""$WHITE"DOWN"$WHITE"] "$DEF""
-					FIRSTDRAW=YES
+					echo -e "   "$WHITE"["$LIGHTYELLOW""$LIGHTRED"DOWN"$LIGHTRED"] "$DEF""
+					REDRAW=YES
 				fi
 		done < hosts.lst
 }
@@ -219,4 +226,5 @@ summarynext()
 		tput rc
 		tput el
 	done
+	FIRSTDRAW=NO
 }
