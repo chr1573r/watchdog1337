@@ -190,9 +190,10 @@ pinghosts()
 					upforward 35
 					echo -e " "$LIGHTRED"$HOSTIP"
 					upforward 53
-					echo -e " "$LIGHTRED"Ping exitcode:$PINGCODE"
-					upforward 73
-					echo -e ""$WHITE"["$LIGHTYELLOW""$WHITE"DOWN"$WHITE"] "$DEF""
+					echo -e " "$LIGHTRED"Ping exitcode: $PINGCODE"
+					upforward 70
+					echo -e "   "$WHITE"["$LIGHTYELLOW""$WHITE"DOWN"$WHITE"] "$DEF""
+					FIRSTDRAW=YES
 				fi
 		done < hosts.lst
 }
