@@ -89,7 +89,7 @@ gfx ()
 		subheader)
 			timeupdate
 			tput cup 6 0
-			echo -e "$RED""///"$GRAY" Watching "$YELLOW"`hostname -d`"$GRAY" from "$YELLOW""`hostname -s`" "$RED"/// "$GRAY"Load:`uptime | awk -F'load average:' '{ print $2 }'`"$RED" ///"$GRAY" $HM"$DEF""
+			echo -e "$RED""///"$GRAY" Watching "$YELLOW"`hostname -d`"$GRAY" from "$YELLOW""`hostname -s`" "$RED"/// "$GRAY"Load:`uptime | awk -F'load average:' '{ print $2 }'`"$RED" ///"$GRAY" $DATE"$DEF""
 			echo
 			echo
 			;;
@@ -137,6 +137,7 @@ timeupdate()
 	DATE=$(date +"%d-%m-%Y")
 	NOWSTAMP=$(date +"%Hh%Mm%Ss")
 	HM=$(date +"%R")
+	HMS=$(date +"%R:%S")
 	HOUR=$(date +"%H")
 	MINUTE=$(date +"%M")
 	SEC=$(date +"%S")
@@ -181,7 +182,7 @@ pinghosts()
 					tput el
 					echo -e " $HOSTLAT"$DEF""
 					upforward 63
-					echo -e "          [ "$LIGHTGREEN"OK"$DEF" ]"
+					echo -e "          [ "$LIGHTGREEN"UP"$DEF" ]"
 					HOSTSOK=$(( HOSTSOK + 1))
 				else
 					PINGCODE=$?
@@ -216,15 +217,15 @@ summarynext()
 {
 	echo
 	if [ "$HOSTSOK" == "$HOSTS" ] ; then
-		echo -e "$RED""///"$GRAY"SUMMARY: "$LIGHTGRAY"$HOSTSOK "$DEF"of "$LIGHTGRAY"$HOSTS"$DEF" hosts are "$LIGHTGREEN" up"$DEF" "
+		echo -e "$RED""///"$GRAY" SUMMARY @ $HMS: "$LIGHTGRAY"$HOSTSOK "$DEF"of "$LIGHTGRAY"$HOSTS"$DEF" hosts are "$LIGHTGREEN"UP"$DEF" "
 	else
-		echo -e "$RED""///"$GRAY"SUMMARY: "$LIGHTGRAY"$HOSTSDOWN "$DEF"of "$LIGHTGRAY"$HOSTS"$DEF" hosts are "$LIGHTRED" down"$DEF" "
+		echo -e "$RED""///"$GRAY" SUMMARY @ $HMS: "$LIGHTGRAY"$HOSTSDOWN "$DEF"of "$LIGHTGRAY"$HOSTS"$DEF" hosts are "$LIGHTRED"DOWN"$DEF" "
 	fi
 	tput sc
 	COUNTDOWN=$REFRESHRATE
 	COUNTERWITHINACOUNTER=10 			#yodawg
 	until [ $COUNTDOWN == 0 ]; do
-		gfx arrow ""$GRAY" Updated: `date`"$DEF". Next refresh: "$LIGHTYELLOW"$COUNTDOWN "$GRAY"second(s).    ([CTRL+C] to exit..)$DEF"
+		gfx arrow ""$GRAY"Next refresh: "$LIGHTYELLOW"$COUNTDOWN "$GRAY"second(s).   ([CTRL+C] to exit..)$DEF"
 		sleep 1
 		if [ $COUNTERWITHINACOUNTER == 0 ]; then gfx subheader; COUNTERWITHINACOUNTER=10; fi
 		COUNTDOWN=$(( COUNTDOWN - 1 ))
