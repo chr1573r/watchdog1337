@@ -14,11 +14,11 @@ source settings.cfg
 gfx splash
 
 gfx header
-gfx subheader
 
 while true
-do
-pinghosts
-FIRSTDRAW=NO
-summarynext
-done
+	do
+		gfx subheader
+		pinghosts
+		FIRSTDRAW=NO
+		summarynext
+	done
