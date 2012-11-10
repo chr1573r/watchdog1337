@@ -166,13 +166,26 @@ pinghosts()
 			#if [ $FIRSTDRAW == NO ]; then fi
 			upforward 53	
 			echo -e " "$DEF"[   "$LIGHTYELLOW"Ping in progress..  "$DEF"]"$GRAY""
-			HOSTLAT=`ping -q -c 3 -n -i 0.2 -W1 $HOSTIP | tail -1| awk '{print $4}' | cut -d '/' -f 2`
-			HOSTLAT="$HOSTLAT ms"
-			upforward 53
-			tput el
-			echo -e " $HOSTLAT"$DEF""
-			upforward 63
-			echo -e "          [ "$LIGHTGREEN"OK"$DEF" ]"
+			ping -q -c 3 -n -i 0.2 -W1 $HOSTIP &> /dev/null
+			if [ $? == 0 ]; then
+				HOSTLAT=`ping -q -c 3 -n -i 0.2 -W1 $HOSTIP | tail -1| awk '{print $4}' | cut -d '/' -f 2`
+				HOSTLAT="$HOSTLAT ms"
+				upforward 53
+				tput el
+				echo -e " $HOSTLAT"$DEF""
+				upforward 63
+				echo -e "          [ "$LIGHTGREEN"OK"$DEF" ]"
+			else
+				PINGCODE=$?
+				tput bold
+				tput setab 1
+				tput setaf 7
+				upforward 53
+				tput el
+				echo -e " Exit code: $PINGCODE"$DEF""
+				upforward 63
+				echo -e "          ["$LIGHTYELLOW"DOWN"$DEF"]"
+			fi
 		done < hosts.lst
 }
 
