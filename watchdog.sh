@@ -15,9 +15,10 @@ gfx splash
 
 gfx header
 gfx subheader
-FIRSTDRAW=NO
+
 while true
 do
 pinghosts
+FIRSTDRAW=NO
 summarynext
 done
