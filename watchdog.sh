@@ -14,11 +14,10 @@ source settings.cfg
 gfx splash
 
 gfx header
-
+gfx subheader
+FIRSTDRAW=NO
 while true
 do
-gfx subheader
 pinghosts
-FIRSTDRAW=NO
 summarynext
 done
