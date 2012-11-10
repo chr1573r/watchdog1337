@@ -21,6 +21,5 @@ while true
 	do
 		gfx subheader
 		pinghosts
-		FIRSTDRAW=NO
 		summarynext
 	done
