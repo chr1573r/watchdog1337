@@ -163,9 +163,9 @@ pinghosts()
 				upforward 35
 				echo -e " "$GRAY"$HOSTIP"
 			fi
-
+			
 			if [ "$REDRAW" == "YES" ] ; then
-				echo -e ""$CYAN"$HOSTDESC"
+				echo -e ""$GRAY"$HOSTDESC"
 				upforward 14
 				echo -e " "$GRAY"$HOSTLOC"
 				upforward 35
@@ -204,7 +204,6 @@ pinghosts()
 					echo -e "   "$WHITE"["$LIGHTYELLOW""$LIGHTRED"DOWN"$LIGHTRED"] "$DEF""
 					REDRAW=YES
 				fi
-			if [ "$REDRAW" == "YES" ] ; then REDRAW=NO; fi
 		done < hosts.lst
 }
 
