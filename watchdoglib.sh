@@ -193,6 +193,7 @@ pinghosts()
 				echo -e " Ping exitcode:$PINGCODE"
 				upforward 73
 				echo -e "["$LIGHTYELLOW"DOWN]"$DEF""
+				upforward 0
 			fi
 		done < hosts.lst
 }
