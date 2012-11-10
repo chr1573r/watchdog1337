@@ -199,7 +199,7 @@ pinghosts()
 					echo -e " "$LIGHTRED"Ping exitcode: $PINGCODE"
 					upforward 70
 					echo -e "   "$WHITE"["$LIGHTYELLOW""$LIGHTRED"DOWN"$LIGHTRED"] "$DEF""
-					HOSTSOK=$(( HOSTSDOWN + 1))
+					HOSTSDOWN=$(( HOSTSDOWN + 1))
 				fi
 		done < hosts.lst
 		if [ "$HOSTSOK" == "$HOSTS" ] ; then REDRAW=NO; fi
@@ -214,9 +214,9 @@ summarynext()
 {
 	echo
 	if [ "$HOSTSOK" == "$HOSTS" ] ; then
-		echo -e "$RED""///"$LIGHTGRAY"Summary: $HOSTSOK "$DEF"of "$LIGHTGRAY"$HOSTS "$DEF"are "$LIGHTGREEN" up"$DEF" "
+		echo -e "$RED""///"$GRAY"SUMMARY: $HOSTSOK "$DEF"of "$LIGHTGRAY"$HOSTS"$DEF" hosts are "$LIGHTGREEN" up"$DEF" "
 	else
-		echo -e "$RED""///"$LIGHTGRAY"Summary: $HOSTSDOWN "$DEF"of "$LIGHTGRAY"$HOSTS "$DEF"are "$LIGHTRED" down"$DEF" "
+		echo -e "$RED""///"$GRAY"SUMMARY: $HOSTSDOWN "$DEF"of "$LIGHTGRAY"$HOSTS"$DEF" hosts are "$LIGHTRED" down"$DEF" "
 	fi
 	tput sc
 	COUNTDOWN=$REFRESHRATE
