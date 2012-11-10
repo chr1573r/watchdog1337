@@ -159,15 +159,15 @@ pinghosts()
 			if [ "$FIRSTDRAW" == "YES" ] ; then
 				echo -e ""$GRAY"$HOSTDESC"
 				upforward 14
-				echo -e " $HOSTLOC"
+				echo -e " "$GRAY"$HOSTLOC"
 				upforward 35
-				echo -e " $HOSTIP"
+				echo -e " "$GRAY"$HOSTIP"
 			elif [ "$REDRAW" == "YES" ] ; then
 				echo -e ""$GRAY"$HOSTDESC"
 				upforward 14
-				echo -e " $HOSTLOC"
+				echo -e " "$GRAY"$HOSTLOC"
 				upforward 35
-				echo -e " $HOSTIP"
+				echo -e " "$GRAY"$HOSTIP"
 				REDRAW=NO
 			fi
 			upforward 53	
