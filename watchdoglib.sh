@@ -147,34 +147,33 @@ pinghosts()
 	X=0
 	Y=10
 
-	if [ "$FIRSTDRAW" == "YES" ] ; then echo -e ""$LIGHTYELLOW"NAME           LOCATION             ADDRESS           AVG.LATENCY        STATUS"$DEF""; fi
-	gfx line
+	if [ "$FIRSTDRAW" == "YES" ] ; then echo -e ""$LIGHTYELLOW"NAME           LOCATION             ADDRESS           AVG.LATENCY        STATUS"$DEF""; gfx line; fi
 	while read -r HOSTENTRY
-	do
-		Y=$(( Y + 1 ))
-		
-		HOSTDESC=`echo $HOSTENTRY | awk -F":" '{print $1}' $2`
-		HOSTLOC=`echo $HOSTENTRY | awk -F":" '{print $2}' $2`
-		HOSTIP=`echo $HOSTENTRY | awk -F":" '{print $3}' $2`
-		#echo YOLO $HOSTENTRY BRO $HOSTDESC $HOSTLOC $HOSTIP $Y
-		if [ "$FIRSTDRAW" == "YES" ] ; then
-		echo -e ""$GRAY"$HOSTDESC"
-		upforward 14
-		echo -e " $HOSTLOC"
-		upforward 35
-		echo -e " $HOSTIP"
-		fi
-		#if [ $FIRSTDRAW == NO ]; then fi
-		upforward 53	
-		echo -e " "$DEF"[   "$LIGHTYELLOW"Ping in progress..  "$DEF"]"$GRAY""
-		HOSTLAT=`ping -q -c 3 -n -i 0.2 -W1 $HOSTIP | tail -1| awk '{print $4}' | cut -d '/' -f 2`
-		HOSTLAT="$HOSTLAT ms"
-		upforward 53
-		tput el
-		echo -e " $HOSTLAT"$DEF""
-		upforward 63
-		echo -e "          [ "$LIGHTGREEN"OK"$DEF" ]"
-	done < hosts.lst
+		do
+			Y=$(( Y + 1 ))
+			
+			HOSTDESC=`echo $HOSTENTRY | awk -F":" '{print $1}' $2`
+			HOSTLOC=`echo $HOSTENTRY | awk -F":" '{print $2}' $2`
+			HOSTIP=`echo $HOSTENTRY | awk -F":" '{print $3}' $2`
+			#echo YOLO $HOSTENTRY BRO $HOSTDESC $HOSTLOC $HOSTIP $Y
+			if [ "$FIRSTDRAW" == "YES" ] ; then
+				echo -e ""$GRAY"$HOSTDESC"
+				upforward 14
+				echo -e " $HOSTLOC"
+				upforward 35
+				echo -e " $HOSTIP"
+			fi
+			#if [ $FIRSTDRAW == NO ]; then fi
+			upforward 53	
+			echo -e " "$DEF"[   "$LIGHTYELLOW"Ping in progress..  "$DEF"]"$GRAY""
+			HOSTLAT=`ping -q -c 3 -n -i 0.2 -W1 $HOSTIP | tail -1| awk '{print $4}' | cut -d '/' -f 2`
+			HOSTLAT="$HOSTLAT ms"
+			upforward 53
+			tput el
+			echo -e " $HOSTLAT"$DEF""
+			upforward 63
+			echo -e "          [ "$LIGHTGREEN"OK"$DEF" ]"
+		done < hosts.lst
 }
 
 upforward()
