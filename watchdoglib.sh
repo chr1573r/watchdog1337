@@ -147,7 +147,7 @@ pinghosts()
 	X=0
 	Y=10
 
-	echo -e ""$LIGHTYELLOW"NAME           LOCATION             ADDRESS           AVG.LATENCY        STATUS"$DEF""
+	if [ "$FIRSTDRAW" == "YES" ] ; then echo -e ""$LIGHTYELLOW"NAME           LOCATION             ADDRESS           AVG.LATENCY        STATUS"$DEF""; fi
 	gfx line
 	while read -r HOSTENTRY
 	do
