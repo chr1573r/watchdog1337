@@ -217,6 +217,7 @@ summarynext()
 		echo -e "$RED""///"$LIGHTGRAY"Summary: $HOSTSOK "$DEF"of "$LIGHTGRAY"$HOSTS "$DEF"are "$LIGHTGREEN" up"$DEF" "
 	else
 		echo -e "$RED""///"$LIGHTGRAY"Summary: $HOSTSDOWN "$DEF"of "$LIGHTGRAY"$HOSTS "$DEF"are "$LIGHTRED" down"$DEF" "
+	fi
 	tput sc
 	COUNTDOWN=$REFRESHRATE
 	COUNTERWITHINACOUNTER=10 			#yodawg
