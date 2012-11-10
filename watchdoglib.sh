@@ -177,12 +177,14 @@ pinghosts()
 				echo -e "          [ "$LIGHTGREEN"OK"$DEF" ]"
 			else
 				PINGCODE=$?
-				upforward 0
 				tput el
 				tput bold
 				tput setab 1
 				tput setaf 7
-				echo -e " $HOSTDESC"
+				upforward 0
+				echo "                                                                                "
+				upforward 0
+				echo -e "$HOSTDESC"
 				upforward 14
 				echo -e " $HOSTLOC"
 				upforward 35
