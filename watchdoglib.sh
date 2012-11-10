@@ -163,6 +163,7 @@ pinghosts()
 			#echo YOLO $HOSTENTRY BRO $HOSTDESC $HOSTLOC $HOSTIP $Y
 			if [ "$REDRAW" == "YES" ] ; then
 				tput el
+				upforward 0
 				#echo "                                                                               "
 				echo -e ""$GRAY"$HOSTDESC"
 				upforward 14
@@ -192,6 +193,7 @@ pinghosts()
 #					tput setaf 7
 #					upforward 0
 #					echo "                                                                               "
+					upforward 0
 					echo -e ""$LIGHTRED"$HOSTDESC"
 					upforward 14
 					echo -e " "$LIGHTRED"$HOSTLOC"
@@ -225,7 +227,7 @@ summarynext()
 	COUNTDOWN=$REFRESHRATE
 	COUNTERWITHINACOUNTER=10 			#yodawg
 	until [ $COUNTDOWN == 0 ]; do
-		gfx arrow ""$GRAY"Next refresh: "$LIGHTYELLOW"$COUNTDOWN "$WHITE"second(s).   ([CTRL+C] to exit..)"$DEF""
+		gfx arrow ""$GRAY"Next check is scheduled in "$LIGHTYELLOW"$COUNTDOWN "$GRAY"second(s).    (Press [CTRL+C] to exit..)"$GRAY""
 		sleep 1
 		if [ $COUNTERWITHINACOUNTER == 0 ]; then gfx subheader; COUNTERWITHINACOUNTER=10; fi
 		COUNTDOWN=$(( COUNTDOWN - 1 ))
