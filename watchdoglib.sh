@@ -89,7 +89,7 @@ gfx ()
 		subheader)
 			timeupdate
 			tput cup 6 0
-			echo -e "$RED""///"$GRAY" Watching "$YELLOW"`hostname -d`"$GRAY" from "$YELLOW""`hostname -s`" "$RED"/// "$GRAY"CPU Usage: `top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%\id.*/\1/" | awk '{print 100 - $1"%"}'`"$RED" ///"$GRAY" Time: $HM"$DEF""
+			echo -e "$RED""///"$GRAY" Watching "$YELLOW"`hostname -d`"$GRAY" from "$YELLOW""`hostname -s`" "$RED"/// "$GRAY"Load average: `uptime | awk -F'load average:' '{ print $2 }'`"$RED" ///"$GRAY" Time: $HM"$DEF""
 			echo
 			echo
 			;;
@@ -184,16 +184,18 @@ upforward()
 }
 summarynext()
 {
-echo
-echo -e "$RED""///"$LIGHTGRAY" Last update: `date`"$DEF""
-tput sc
-COUNTDOWN=$REFRESHRATE
-until [ $COUNTDOWN == 0 ]; do
-gfx arrow "Next check is scheduled in "$LIGHTYELLOW"$COUNTDOWN "$WHITE"second(s).    (Press [CTRL+C] to exit..)"$DEF""
-sleep 1
-COUNTDOWN=$(( COUNTDOWN - 1 ))
-tput rc
-tput el
-done
-
+	echo
+	echo -e "$RED""///"$LIGHTGRAY" Last update: `date`"$DEF""
+	tput sc
+	COUNTDOWN=$REFRESHRATE
+	COUNTERWITHINACOUNTER=10 			#yodawg
+	until [ $COUNTDOWN == 0 ]; do
+		if [ $COUNTERWITHINACOUNTER == 0 ]; do gfx subheader; COUNTERWITHINACOUNTER=10; done
+		gfx arrow "Next check is scheduled in "$LIGHTYELLOW"$COUNTDOWN "$WHITE"second(s).    (Press [CTRL+C] to exit..)"$DEF""
+		sleep 1
+		COUNTDOWN=$(( COUNTDOWN - 1 ))
+		COUNTERWITHINACOUNTER=$(( COUNTERWITHINACOUNTER - 1 ))
+		tput rc
+		tput el
+	done
 }
