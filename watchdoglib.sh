@@ -190,7 +190,7 @@ summarynext()
 	COUNTDOWN=$REFRESHRATE
 	COUNTERWITHINACOUNTER=10 			#yodawg
 	until [ $COUNTDOWN == 0 ]; do
-		if [ $COUNTERWITHINACOUNTER == 0 ]; do gfx subheader; COUNTERWITHINACOUNTER=10; done
+		if [ $COUNTERWITHINACOUNTER == 0 ]; then gfx subheader; COUNTERWITHINACOUNTER=10; fi
 		gfx arrow "Next check is scheduled in "$LIGHTYELLOW"$COUNTDOWN "$WHITE"second(s).    (Press [CTRL+C] to exit..)"$DEF""
 		sleep 1
 		COUNTDOWN=$(( COUNTDOWN - 1 ))
