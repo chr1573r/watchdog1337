@@ -156,13 +156,13 @@ pinghosts()
 			HOSTLOC=`echo $HOSTENTRY | awk -F":" '{print $2}' $2`
 			HOSTIP=`echo $HOSTENTRY | awk -F":" '{print $3}' $2`
 			#echo YOLO $HOSTENTRY BRO $HOSTDESC $HOSTLOC $HOSTIP $Y
-			if [ "$FIRSTDRAW" == "YES" ] ; then
+#			if [ "$FIRSTDRAW" == "YES" ] ; then
 				echo -e ""$GRAY"$HOSTDESC"
 				upforward 14
 				echo -e " $HOSTLOC"
 				upforward 35
 				echo -e " $HOSTIP"
-			fi
+#			fi
 			#if [ $FIRSTDRAW == NO ]; then fi
 			upforward 53	
 			echo -e " "$DEF"[   "$LIGHTYELLOW"Ping in progress..  "$DEF"]"$GRAY""
