@@ -146,32 +146,28 @@ pinghosts()
 	# Converts $HOST# into $HOSTNAME#, $HOSTLOC#, $HOSTIP#
 	X=0
 	Y=10
+	HOSTS=0
+	OKHOSTS=0
+	DOWNHOSTS=0
 
-	if [ "$FIRSTDRAW" == "YES" ] ; then echo -e ""$LIGHTYELLOW"NAME           LOCATION             ADDRESS           AVG.LATENCY        STATUS"$DEF""; gfx line; fi
+	if [ "$REDRAW" == "YES" ] ; then echo -e ""$LIGHTYELLOW"NAME           LOCATION             ADDRESS           AVG.LATENCY        STATUS"$DEF""; gfx line; fi
 	while read -r HOSTENTRY
 		do
 			Y=$(( Y + 1 ))
+			HOSTS=$(( HOSTS + 1))
 			
 			HOSTDESC=`echo $HOSTENTRY | awk -F":" '{print $1}' $2`
 			HOSTLOC=`echo $HOSTENTRY | awk -F":" '{print $2}' $2`
 			HOSTIP=`echo $HOSTENTRY | awk -F":" '{print $3}' $2`
 			#echo YOLO $HOSTENTRY BRO $HOSTDESC $HOSTLOC $HOSTIP $Y
-			if [ "$FIRSTDRAW" == "YES" ] ; then
-				echo -e ""$GRAY"$HOSTDESC"
-				upforward 14
-				echo -e " "$GRAY"$HOSTLOC"
-				upforward 35
-				echo -e " "$GRAY"$HOSTIP"
-			fi
-			
 			if [ "$REDRAW" == "YES" ] ; then
 				echo -e ""$GRAY"$HOSTDESC"
 				upforward 14
 				echo -e " "$GRAY"$HOSTLOC"
 				upforward 35
 				echo -e " "$GRAY"$HOSTIP"
-				REDRAW=NO
 			fi
+			
 			upforward 53	
 			echo -e " "$DEF"[   "$LIGHTYELLOW"Ping in progress..  "$DEF"]"$GRAY""
 			
@@ -184,6 +180,7 @@ pinghosts()
 					echo -e " $HOSTLAT"$DEF""
 					upforward 63
 					echo -e "          [ "$LIGHTGREEN"OK"$DEF" ]"
+					HOSTSOK=$(( HOSTSOK + 1))
 				else
 					PINGCODE=$?
 					tput el
@@ -202,9 +199,10 @@ pinghosts()
 					echo -e " "$LIGHTRED"Ping exitcode: $PINGCODE"
 					upforward 70
 					echo -e "   "$WHITE"["$LIGHTYELLOW""$LIGHTRED"DOWN"$LIGHTRED"] "$DEF""
-					REDRAW=YES
+					HOSTSOK=$(( HOSTSDOWN + 1))
 				fi
 		done < hosts.lst
+		if [ "$HOSTSOK" == "$HOSTS" ] ; then REDRAW=NO; fi
 }
 
 upforward()
@@ -215,12 +213,15 @@ upforward()
 summarynext()
 {
 	echo
-	echo -e "$RED""///"$LIGHTGRAY" Last update: `date`"$DEF""
+	if [ "$HOSTSOK" == "$HOSTS" ] ; then
+		echo -e "$RED""///"$LIGHTGRAY"Summary: $HOSTSOK "$DEF"of "$LIGHTGRAY"$HOSTS "$DEF"are "$LIGHTGREEN" up"$DEF" "
+	else
+		echo -e "$RED""///"$LIGHTGRAY"Summary: $HOSTSDOWN "$DEF"of "$LIGHTGRAY"$HOSTS "$DEF"are "$LIGHTRED" down"$DEF" "
 	tput sc
 	COUNTDOWN=$REFRESHRATE
 	COUNTERWITHINACOUNTER=10 			#yodawg
 	until [ $COUNTDOWN == 0 ]; do
-		gfx arrow "Next check is scheduled in "$LIGHTYELLOW"$COUNTDOWN "$WHITE"second(s).    (Press [CTRL+C] to exit..)"$DEF""
+		gfx arrow ""$GRAY" Updated: `date`"$DEF"." "Next refresh: "$LIGHTYELLOW"$COUNTDOWN "$WHITE"second(s).    ([CTRL+C] to exit..)"$DEF""
 		sleep 1
 		if [ $COUNTERWITHINACOUNTER == 0 ]; then gfx subheader; COUNTERWITHINACOUNTER=10; fi
 		COUNTDOWN=$(( COUNTDOWN - 1 ))
@@ -228,5 +229,4 @@ summarynext()
 		tput rc
 		tput el
 	done
-	FIRSTDRAW=NO
 }

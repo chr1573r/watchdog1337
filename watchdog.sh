@@ -4,8 +4,7 @@
 
 # Variables
 APPVERSION=0.1
-FIRSTDRAW=YES
-REDRAW=NO
+REDRAW=YES
 
 clear
 echo Loading library..
