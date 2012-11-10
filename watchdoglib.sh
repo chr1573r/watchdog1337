@@ -156,45 +156,44 @@ pinghosts()
 			HOSTLOC=`echo $HOSTENTRY | awk -F":" '{print $2}' $2`
 			HOSTIP=`echo $HOSTENTRY | awk -F":" '{print $3}' $2`
 			#echo YOLO $HOSTENTRY BRO $HOSTDESC $HOSTLOC $HOSTIP $Y
-#			if [ "$FIRSTDRAW" == "YES" ] ; then
+			if [ "$FIRSTDRAW" == "YES" ] ; then
 				echo -e ""$GRAY"$HOSTDESC"
 				upforward 14
 				echo -e " $HOSTLOC"
 				upforward 35
 				echo -e " $HOSTIP"
-#			fi
-			#if [ $FIRSTDRAW == NO ]; then fi
+			fi
 			upforward 53	
 			echo -e " "$DEF"[   "$LIGHTYELLOW"Ping in progress..  "$DEF"]"$GRAY""
+			
 			ping -q -c 3 -n -i 0.2 -W1 $HOSTIP &> /dev/null
-			if [ $? == 0 ]; then
-				HOSTLAT=`ping -q -c 3 -n -i 0.2 -W1 $HOSTIP | tail -1| awk '{print $4}' | cut -d '/' -f 2`
-				HOSTLAT="$HOSTLAT ms"
-				upforward 53
-				tput el
-				echo -e " $HOSTLAT"$DEF""
-				upforward 63
-				echo -e "          [ "$LIGHTGREEN"OK"$DEF" ]"
-			else
-				PINGCODE=$?
-				tput el
-				tput bold
-				tput setab 1
-				tput setaf 7
-				upforward 0
-				echo "                                                                               "
-				upforward 0
-				echo -e "$HOSTDESC"
-				upforward 14
-				echo -e " $HOSTLOC"
-				upforward 35
-				echo -e " $HOSTIP"
-				upforward 53
-				echo -e " Ping exitcode:$PINGCODE"
-				upforward 73
-				echo -e "["$LIGHTYELLOW"DOWN]"$DEF""
-				FIRSTDRAW=YES
-			fi
+				if [ $? == 0 ]; then
+					HOSTLAT=`ping -q -c 3 -n -i 0.2 -W1 $HOSTIP | tail -1| awk '{print $4}' | cut -d '/' -f 2`
+					HOSTLAT="$HOSTLAT ms"
+					upforward 53
+					tput el
+					echo -e " $HOSTLAT"$DEF""
+					upforward 63
+					echo -e "          [ "$LIGHTGREEN"OK"$DEF" ]"
+				else
+					PINGCODE=$?
+					tput el
+#					tput bold
+#					tput setab 1
+#					tput setaf 7
+#					upforward 0
+#					echo "                                                                               "
+					upforward 0
+					echo -e ""$LIGHTRED"$HOSTDESC"
+					upforward 14
+					echo -e " "$LIGHTRED"$HOSTLOC"
+					upforward 35
+					echo -e " "$LIGHTRED"$HOSTIP"
+					upforward 53
+					echo -e " "$LIGHTRED"Ping exitcode:$PINGCODE"
+					upforward 73
+					echo -e ""$WHITE"["$LIGHTYELLOW""$WHITE"DOWN"$WHITE"] "$DEF""
+				fi
 		done < hosts.lst
 }
 
