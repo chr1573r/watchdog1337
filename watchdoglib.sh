@@ -162,7 +162,9 @@ pinghosts()
 				echo -e " "$GRAY"$HOSTLOC"
 				upforward 35
 				echo -e " "$GRAY"$HOSTIP"
-			elif [ "$REDRAW" == "YES" ] ; then
+			fi
+			
+			if [ "$REDRAW" == "YES" ] ; then
 				echo -e ""$GRAY"$HOSTDESC"
 				upforward 14
 				echo -e " "$GRAY"$HOSTLOC"
