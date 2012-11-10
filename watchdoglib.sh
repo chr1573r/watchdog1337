@@ -177,14 +177,15 @@ pinghosts()
 				echo -e "          [ "$LIGHTGREEN"OK"$DEF" ]"
 			else
 				PINGCODE=$?
+				upforward 0
 				tput bold
 				tput setab 1
 				tput setaf 7
 				upforward 53
 				tput el
 				echo -e " Exit code: $PINGCODE"$DEF""
-				upforward 63
-				echo -e "          ["$LIGHTYELLOW"DOWN"$DEF"]"
+				upforward 73
+				echo -e "["$LIGHTYELLOW"DOWN"$DEF"]"
 			fi
 		done < hosts.lst
 }
