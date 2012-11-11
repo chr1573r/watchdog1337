@@ -7,7 +7,7 @@ APPVERSION=0.1
 REDRAW=YES
 
 # Set trap for catching Ctrl-C and kills
-trap "{ Watchdog terminated at `date` ; reset; exit; }" SIGINT SIGTERM
+trap "{ reset; echo Watchdog1337 $APPVERSION terminated at `date`; exit; }" SIGINT SIGTERM
 
 clear
 echo Loading library..
