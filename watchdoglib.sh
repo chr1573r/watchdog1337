@@ -175,9 +175,9 @@ pinghosts()
 			upforward 53	
 			echo -e " "$DEF"[   "$LIGHTYELLOW"Ping in progress..  "$DEF"]"$GRAY""
 			
-			ping -q -c 3 -n -i 0.2 -W1 $HOSTIP &> /dev/null
+			ping -q -c 1 -n -i 0.2 -W1 $HOSTIP &> /dev/null
 				if [ $? == 0 ]; then
-					HOSTLAT=`ping -q -c 3 -n -i 0.2 -W1 $HOSTIP | tail -1| awk '{print $4}' | cut -d '/' -f 2`
+					HOSTLAT=`ping -q -c 2 -n -i 0.2 -W1 $HOSTIP | tail -1| awk '{print $4}' | cut -d '/' -f 2`
 					HOSTLAT="$HOSTLAT ms"
 					upforward 53
 					tput el
