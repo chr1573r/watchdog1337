@@ -91,6 +91,7 @@ gfx ()
 			tput cup 6 0
 			echo -e "$RED""///"$GRAY" Watching "$YELLOW"`hostname -d`"$GRAY" from "$YELLOW""`hostname -s`" "$RED"/// "$GRAY"Load:`uptime | awk -F'load average:' '{ print $2 }'`"$RED" ///"$GRAY" $HM"$DEF""
 			echo
+			echo
 			;;
 		arrow)
 			echo -e "$RED""--""$YELLOW""> ""$WHITE""$2"$DEF""
@@ -145,7 +146,7 @@ pinghosts()
 {
 	# Converts $HOST# into $HOSTNAME#, $HOSTLOC#, $HOSTIP#
 	X=0
-	Y=9
+	Y=10
 	HOSTS=0
 	HOSTSOK=0
 	HOSTSDOWN=0
@@ -216,6 +217,7 @@ upforward()
 summarynext()
 {
 	echo
+	tput sc
 	tput el
 	if [ "$HOSTSOK" == "$HOSTS" ] ; then
 		echo -e "$RED""///"$YELLOW" SUMMARY @ $HMS: "$LIGHTGRAY"$HOSTSOK "$DEF"of "$LIGHTGRAY"$HOSTS"$DEF" hosts are "$LIGHTGREEN"UP"$DEF" "
