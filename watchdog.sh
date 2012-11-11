@@ -7,7 +7,7 @@
 # Check README for instructions
 
 # Variables
-APPVERSION=1.0 Beta
+APPVERSION="1.0 Beta"
 REDRAW=YES
 
 # Pretty colors for the terminal:
