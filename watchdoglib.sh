@@ -175,7 +175,7 @@ pinghosts()
 			upforward 53	
 			echo -e " "$DEF"[   "$LIGHTYELLOW"Ping in progress..  "$DEF"]"$GRAY""
 			
-			ping -q -c 1 -n -i 0.2 -W1 $HOSTIP &> /dev/null
+			ping -q -c 2 -n -i 0.2 -W1 $HOSTIP &> /dev/null
 				if [ $? == 0 ]; then
 					HOSTLAT=`ping -q -c 2 -n -i 0.2 -W1 $HOSTIP | tail -1| awk '{print $4}' | cut -d '/' -f 2`
 					HOSTLAT="$HOSTLAT ms"
@@ -185,6 +185,7 @@ pinghosts()
 					upforward 63
 					echo -e "          [ "$LIGHTGREEN"UP"$DEF" ]"
 					HOSTSOK=$(( HOSTSOK + 1))
+					REDRAW=NO # Redraw is not necessary for next host
 				else
 					PINGCODE=$?
 					tput el
@@ -204,9 +205,10 @@ pinghosts()
 					upforward 70
 					echo -e "   "$LIGHTGRAY"["$LIGHTYELLOW""$LIGHTRED"DOWN"$LIGHTGRAY"] "$DEF""
 					HOSTSDOWN=$(( HOSTSDOWN + 1))
+					REDRAW=YES # Redraw next host pinged
 				fi
 		done < hosts.lst
-		if [ "$HOSTSOK" == "$HOSTS" ] ; then REDRAW=NO; fi
+		if [ "$HOSTSOK" == "$HOSTS" ] ; then REDRAW=NO; fi # If any hosts failed, we want to redraw next round
 }
 
 upforward()
