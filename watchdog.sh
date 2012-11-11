@@ -4,7 +4,6 @@
 
 # Variables
 APPVERSION=0.1
-FIRSTDRAW=YES
 REDRAW=YES
 
 clear

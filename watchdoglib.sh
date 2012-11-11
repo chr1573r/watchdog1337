@@ -185,7 +185,6 @@ pinghosts()
 					upforward 63
 					echo -e "          [ "$LIGHTGREEN"UP"$DEF" ]"
 					HOSTSOK=$(( HOSTSOK + 1))
-					if [ "$FIRSTDRAW" == "NO" ] ; then REDRAW=NO; fi # Disable redraws issued only if Firstdraw is no
 				else
 					PINGCODE=$?
 					tput el
@@ -208,7 +207,6 @@ pinghosts()
 					REDRAW=YES # Redraw next host pinged
 				fi
 		done < hosts.lst
-		FIRSTDRAW=NO
 		if [ "$HOSTSOK" == "$HOSTS" ] ; then REDRAW=NO; else REDRAW=YES; fi # If any hosts failed, we want to redraw next round
 }
 
