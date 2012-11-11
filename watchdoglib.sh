@@ -209,7 +209,7 @@ pinghosts()
 				fi
 		done < hosts.lst
 		FIRSTDRAW=NO
-		if [ "$HOSTSOK" == "$HOSTS" ] ; then REDRAW=NO; fi # If any hosts failed, we want to redraw next round
+		if [ "$HOSTSOK" == "$HOSTS" ] ; then REDRAW=NO; else REDRAW=YES fi # If any hosts failed, we want to redraw next round
 }
 
 upforward()
