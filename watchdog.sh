@@ -150,7 +150,7 @@ pinghosts() # Parses hosts.lst into variables, pings host, displays output based
 					upforward 53
 					echo -e " "$DEF""$LIGHTRED"Ping exitcode: $PINGCODE"
 					upforward 70
-					echo -e "   "$DEF""$GRAY"["$DEF""$LIGHTRED"DOWN"$DEF""$RED"] "$DEF""
+					echo -e "   "$DEF""$GRAY"["$DEF""$LIGHTRED"DOWN"$DEF""$GRAY"] "$DEF""
 					HOSTSDOWN=$(( HOSTSDOWN + 1))
 					REDRAW=YES # Redraw next host pinged
 				fi
