@@ -121,7 +121,7 @@ pinghosts() # Parses hosts.lst into variables, pings host, displays output based
 			fi
 			
 			upforward 53	
-			echo -e " "$WHITE"[   "$LIGHTYELLOW"Ping in progress..  "$WHITE"]"
+			echo -e " "$WHITE"[   "$LIGHTYELLOW"Ping in progress..  "$WHITE"]"$DEF""
 			
 			ping -q -c 2 -n -i 0.2 -W1 $HOSTIP &> /dev/null
 				if [ $? == 0 ]; then
@@ -131,7 +131,7 @@ pinghosts() # Parses hosts.lst into variables, pings host, displays output based
 					tput el
 					echo -e " "$GRAY"$HOSTLAT"
 					upforward 63
-					echo -e "          "$GREEN"[ "$LIGHTGREEN"UP"$GREEN" ]"
+					echo -e "          "$GREEN"[ "$LIGHTGREEN"UP"$GREEN" ]"$DEF""
 					HOSTSOK=$(( HOSTSOK + 1))
 				else
 					PINGCODE=$?
@@ -168,9 +168,9 @@ summarynext() #Displays a status summary and statistics and waits the number of 
 	echo
 	tput el
 	if [ "$HOSTSOK" == "$HOSTS" ] ; then
-		echo -e "$RED""///"$YELLOW" SUMMARY @ $HMS: "$LIGHTGRAY"$HOSTSOK"$DEF""$GRAY" of "$LIGHTGRAY"$HOSTS"$DEF""$GRAY" hosts are "$LIGHTGREEN"UP"$DEF" "
+		echo -e "$RED""///"$YELLOW" SUMMARY @ $HMS: "$WHITE"$HOSTSOK"$DEF""$GRAY" of "$WHITE"$HOSTS"$DEF""$GRAY" hosts are "$LIGHTGREEN"UP"$DEF" "
 	else
-		echo -e "$RED""///"$YELLOW" SUMMARY @ $HMS: "$LIGHTGRAY"$HOSTSDOWN "$GRAY"of "$LIGHTGRAY"$HOSTS"$GRAY" hosts are "$LIGHTRED"DOWN"$DEF" "
+		echo -e "$RED""///"$YELLOW" SUMMARY @ $HMS: "$WHITE"$HOSTSDOWN"$DEF""$GRAY" of "$WHITE"$HOSTS"$DEF""$GRAY" hosts are "$LIGHTRED"DOWN"$DEF" "
 	fi
 	tput sc
 	COUNTDOWN=$REFRESHRATE
