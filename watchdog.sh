@@ -53,7 +53,7 @@ gfx () # Used to display repeating "graphics" where needed
 			echo -e ""$LIGHTRED"   | |/ |/ / ___ |/ / / /___/ __  / /_/ / /_/ / /_/ /  "$LIGHTYELLOW"  / /___/ /__/ / / /"$DEF""
 			echo -e ""$LIGHTRED"   |__/|__/_/  |_/_/  \____/_/ /_/_____/\____/\____/   "$LIGHTYELLOW" /_//____/____/ /_/"$DEF""
 			echo
-			echo -e "       "$RED"WATCHDOG "$YELLOW"1337 "$DEF"Version $APPVERSION - "$YELLOW"CSDNSERVER.COM"$DEF" (C) 2012"$DEF
+			echo -e "          "$RED"WATCHDOG "$YELLOW"1337 "$DEF"Version $APPVERSION - "$RED"Cj Designs"$GREY"/"$YELLOW"CSDNSERVER.COM"$DEF" - 2012"$DEF
 			sleep 2
 			clear
 			
@@ -203,6 +203,7 @@ if [ -f settings.cfg ] ; then
 	source settings.cfg
 else
 	echo -e ""$YELLOW"WATCHDOG Warning: "$GREY"No settings.cfg, defaulting refreshrate to 5 seconds"$DEF""
+	sleep 2
 	REFRESHRATE=5
 fi
 
@@ -210,7 +211,8 @@ echo Checking hosts.lst..   # Read from hosts.lst, if exists. Otherwise terminat
 if [ -f hosts.lst ] ; then
 	continue
 else
-	echo -e ""$RED"WATCHDOG ERROR: "$GREY"Could not locate hosts.lst, script terminated"$DEF""
+	echo -e ""$RED"WATCHDOG ERROR: "$GREY"Could not locate hosts.lst, terminating script.."$DEF""
+	sleep 3
 	exit
 fi
 
