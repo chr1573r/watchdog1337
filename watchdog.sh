@@ -60,7 +60,7 @@ gfx () # Used to display repeating "graphics" where needed
 			;;
 		
 		line)
-			echo -e "$RED--------------------------------------------------------------------------------$DEF"
+			echo -e ""$DEF""$RED"--------------------------------------------------------------------------------"$DEF""
 			;;
 
 		header)
@@ -99,7 +99,7 @@ pinghosts() # Parses hosts.lst into variables, pings host, displays output based
 	HOSTSOK=0
 	HOSTSDOWN=0
 
-	if [ "$REDRAW" == "YES" ] ; then echo -e ""$LIGHTYELLOW"NAME           LOCATION             ADDRESS           AVG.LATENCY        STATUS"$DEF""; gfx line; fi
+	if [ "$REDRAW" == "YES" ] ; then echo -e ""$DEF""$LIGHTYELLOW"NAME           LOCATION             ADDRESS           AVG.LATENCY        STATUS"$DEF""; gfx line; fi
 	while read -r HOSTENTRY
 		do
 			Y=$(( Y + 1 ))
@@ -131,7 +131,7 @@ pinghosts() # Parses hosts.lst into variables, pings host, displays output based
 					tput el
 					echo -e " "$GRAY"$HOSTLAT"
 					upforward 63
-					echo -e "          "$GREEN"[ "$LIGHTGREEN"UP"$GREEN""$DEF" ]"
+					echo -e "          "$GREEN"[ "$LIGHTGREEN"UP"$DEF""$GREEN""$DEF" ]"
 					HOSTSOK=$(( HOSTSOK + 1))
 				else
 					PINGCODE=$?
@@ -142,15 +142,15 @@ pinghosts() # Parses hosts.lst into variables, pings host, displays output based
 #					upforward 0
 #					echo "                                                                               "
 					upforward 0
-					echo -e ""$LIGHTRED"$HOSTDESC"
+					echo -e ""$DEF""$LIGHTRED"$HOSTDESC"
 					upforward 14
-					echo -e " "$LIGHTRED"$HOSTLOC"
+					echo -e " "$DEF""$LIGHTRED"$HOSTLOC"
 					upforward 35
-					echo -e " "$LIGHTRED"$HOSTIP"
+					echo -e " "$DEF""$LIGHTRED"$HOSTIP"
 					upforward 53
-					echo -e " "$LIGHTRED"Ping exitcode: $PINGCODE"
+					echo -e " "$DEF""$LIGHTRED"Ping exitcode: $PINGCODE"
 					upforward 70
-					echo -e "   "$RED"["$LIGHTRED"DOWN"$RED"] "$DEF""
+					echo -e "   "$DEF""$RED"["$DEF""$LIGHTRED""$DEF"DOWN"$DEF""$RED"] "$DEF""
 					HOSTSDOWN=$(( HOSTSDOWN + 1))
 					REDRAW=YES # Redraw next host pinged
 				fi
