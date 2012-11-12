@@ -53,7 +53,7 @@ gfx () # Used to display repeating "graphics" where needed
 			echo -e ""$LIGHTRED"   | |/ |/ / ___ |/ / / /___/ __  / /_/ / /_/ / /_/ /  "$LIGHTYELLOW"  / /___/ /__/ / / /"$DEF""
 			echo -e ""$LIGHTRED"   |__/|__/_/  |_/_/  \____/_/ /_/_____/\____/\____/   "$LIGHTYELLOW" /_//____/____/ /_/"$DEF""
 			echo
-			echo -e "          "$RED"WATCHDOG "$YELLOW"1337 "$DEF"Version $APPVERSION - "$RED"Cj Designs"$GRAY"/"$YELLOW"CSDNSERVER.COM"$GRAY" - 2012"
+			echo -e "          "$RED"WATCHDOG "$YELLOW"1337 "$GRAY"Version $APPVERSION - "$RED"Cj Designs"$GRAY"/"$YELLOW"CSDNSERVER.COM"$GRAY" - 2012"
 			sleep 2
 			clear
 			
@@ -129,7 +129,7 @@ pinghosts() # Parses hosts.lst into variables, pings host, displays output based
 					HOSTLAT="$HOSTLAT ms"
 					upforward 53
 					tput el
-					echo -e " "$LIGHTGRAY"$HOSTLAT"
+					echo -e " "$GRAY"$HOSTLAT"
 					upforward 63
 					echo -e "          "$GREEN"[ "$LIGHTGREEN"UP"$GREEN" ]"
 					HOSTSOK=$(( HOSTSOK + 1))
@@ -168,7 +168,7 @@ summarynext() #Displays a status summary and statistics and waits the number of 
 	echo
 	tput el
 	if [ "$HOSTSOK" == "$HOSTS" ] ; then
-		echo -e "$RED""///"$YELLOW" SUMMARY @ $HMS: "$LIGHTGRAY"$HOSTSOK "$GRAY"of "$LIGHTGRAY"$HOSTS"$GRAY" hosts are "$LIGHTGREEN"UP"$DEF" "
+		echo -e "$RED""///"$YELLOW" SUMMARY @ $HMS: "$LIGHTGRAY"$HOSTSOK"$DEF""$GRAY" of "$LIGHTGRAY"$HOSTS"$DEF""$GRAY" hosts are "$LIGHTGREEN"UP"$DEF" "
 	else
 		echo -e "$RED""///"$YELLOW" SUMMARY @ $HMS: "$LIGHTGRAY"$HOSTSDOWN "$GRAY"of "$LIGHTGRAY"$HOSTS"$GRAY" hosts are "$LIGHTRED"DOWN"$DEF" "
 	fi
