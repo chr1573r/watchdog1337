@@ -193,7 +193,7 @@ summarynext() #Displays a status summary and statistics and waits the number of 
 
 # The actual runscript:
 
-trap "{ reset; echo Watchdog1337 $APPVERSION terminated at `date`; exit; }" SIGINT SIGTERM EXIT # Set trap for catching Ctrl-C and kills, so we can reset terminal upon exit
+trap "{ reset; clear;echo Watchdog1337 $APPVERSION terminated at `date`; exit; }" SIGINT SIGTERM EXIT # Set trap for catching Ctrl-C and kills, so we can reset terminal upon exit
 
 clear
 gfx splash # Display splash screen with logo
