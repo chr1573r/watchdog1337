@@ -53,7 +53,7 @@ gfx () # Used to display repeating "graphics" where needed
 			echo -e ""$LIGHTRED"   | |/ |/ / ___ |/ / / /___/ __  / /_/ / /_/ / /_/ /  "$LIGHTYELLOW"  / /___/ /__/ / / /"$DEF""
 			echo -e ""$LIGHTRED"   |__/|__/_/  |_/_/  \____/_/ /_/_____/\____/\____/   "$LIGHTYELLOW" /_//____/____/ /_/"$DEF""
 			echo
-			echo -e "          "$RED"WATCHDOG "$YELLOW"1337 "$DEF"Version $APPVERSION - "$RED"Cj Designs"$GREY"/"$YELLOW"CSDNSERVER.COM"$DEF" - 2012"$DEF
+			echo -e "          "$RED"WATCHDOG "$YELLOW"1337 "$DEF"Version $APPVERSION - "$RED"Cj Designs"$GRAY"/"$YELLOW"CSDNSERVER.COM"$GRAY" - 2012"
 			sleep 2
 			clear
 			
@@ -121,7 +121,7 @@ pinghosts() # Parses hosts.lst into variables, pings host, displays output based
 			fi
 			
 			upforward 53	
-			echo -e " "$DEF"[   "$LIGHTYELLOW"Ping in progress..  "$DEF"]"$GRAY""
+			echo -e " "$WHITE"[   "$LIGHTYELLOW"Ping in progress..  "$WHITE"]"
 			
 			ping -q -c 2 -n -i 0.2 -W1 $HOSTIP &> /dev/null
 				if [ $? == 0 ]; then
@@ -129,9 +129,9 @@ pinghosts() # Parses hosts.lst into variables, pings host, displays output based
 					HOSTLAT="$HOSTLAT ms"
 					upforward 53
 					tput el
-					echo -e " $HOSTLAT"$DEF""
+					echo -e " "$LIGHTGRAY"$HOSTLAT"
 					upforward 63
-					echo -e "          [ "$LIGHTGREEN"UP"$DEF" ]"
+					echo -e "          "$GREEN"[ "$LIGHTGREEN"UP"$GREEN" ]"
 					HOSTSOK=$(( HOSTSOK + 1))
 				else
 					PINGCODE=$?
@@ -150,7 +150,7 @@ pinghosts() # Parses hosts.lst into variables, pings host, displays output based
 					upforward 53
 					echo -e " "$LIGHTRED"Ping exitcode: $PINGCODE"
 					upforward 70
-					echo -e "   "$LIGHTGRAY"["$LIGHTYELLOW""$LIGHTRED"DOWN"$LIGHTGRAY"] "$DEF""
+					echo -e "   "$RED"["$LIGHTRED"DOWN"$RED"] "$DEF""
 					HOSTSDOWN=$(( HOSTSDOWN + 1))
 					REDRAW=YES # Redraw next host pinged
 				fi
@@ -168,15 +168,15 @@ summarynext() #Displays a status summary and statistics and waits the number of 
 	echo
 	tput el
 	if [ "$HOSTSOK" == "$HOSTS" ] ; then
-		echo -e "$RED""///"$YELLOW" SUMMARY @ $HMS: "$LIGHTGRAY"$HOSTSOK "$DEF"of "$LIGHTGRAY"$HOSTS"$DEF" hosts are "$LIGHTGREEN"UP"$DEF" "
+		echo -e "$RED""///"$YELLOW" SUMMARY @ $HMS: "$LIGHTGRAY"$HOSTSOK "$GRAY"of "$LIGHTGRAY"$HOSTS"$GRAY" hosts are "$LIGHTGREEN"UP"$DEF" "
 	else
-		echo -e "$RED""///"$YELLOW" SUMMARY @ $HMS: "$LIGHTGRAY"$HOSTSDOWN "$DEF"of "$LIGHTGRAY"$HOSTS"$DEF" hosts are "$LIGHTRED"DOWN"$DEF" "
+		echo -e "$RED""///"$YELLOW" SUMMARY @ $HMS: "$LIGHTGRAY"$HOSTSDOWN "$GRAY"of "$LIGHTGRAY"$HOSTS"$GRAY" hosts are "$LIGHTRED"DOWN"$DEF" "
 	fi
 	tput sc
 	COUNTDOWN=$REFRESHRATE
 	COUNTERWITHINACOUNTER=10 			#yodawg
 	until [ $COUNTDOWN == 0 ]; do
-		echo -e -n "$RED""--""$YELLOW""> "$GRAY"Next check is scheduled in "$LIGHTYELLOW"$COUNTDOWN"$DEF" "$GRAY"second(s).    (Press [CTRL+C] to exit..)"$GRAY""
+		echo -e -n "$RED""--""$YELLOW""> "$GRAY"Next check is scheduled in "$LIGHTYELLOW"$COUNTDOWN"$DEF" "$GRAY"second(s).    (Press [CTRL+C] to exit..)"$DEF""
 		sleep 1
 		if [ $COUNTERWITHINACOUNTER == 0 ]; then gfx subheader; COUNTERWITHINACOUNTER=10; fi
 		COUNTDOWN=$(( COUNTDOWN - 1 ))
@@ -202,7 +202,7 @@ echo Loading configuration.. # Read from settings.cfg, if exists
 if [ -f settings.cfg ] ; then
 	source settings.cfg
 else
-	echo -e ""$YELLOW"WATCHDOG Warning: "$GREY"No settings.cfg, defaulting refreshrate to 5 seconds"$DEF""
+	echo -e ""$YELLOW"WATCHDOG Warning: "$GRAY"No settings.cfg, defaulting refreshrate to 5 seconds"$DEF""
 	sleep 2
 	REFRESHRATE=5
 fi
@@ -211,7 +211,7 @@ echo Checking hosts.lst..   # Read from hosts.lst, if exists. Otherwise terminat
 if [ -f hosts.lst ] ; then
 	continue
 else
-	echo -e ""$RED"WATCHDOG ERROR: "$GREY"Could not locate hosts.lst, terminating script.."$DEF""
+	echo -e ""$RED"WATCHDOG ERROR: "$GRAY"Could not locate hosts.lst, terminating script.."$DEF""
 	sleep 3
 	exit
 fi
