@@ -7,7 +7,7 @@
 # Check README for instructions
 
 # Variables
-APPVERSION="1.0 Beta"
+APPVERSION="1.0 Beta 2"
 REDRAW=YES
 
 # Pretty colors for the terminal:
@@ -166,6 +166,9 @@ upforward() # Move up one line in terminal and jump to horisontal posistion spec
 summarynext() #Displays a status summary and statistics and waits the number of seconds determined by REFRESHRATE
 {
 	echo
+	if [ "$CUSTOMCMDENABLE" == "1" ] ; then # Execute a custom command, if enabled in settings.cfg
+		$CUSTOMCMD
+	fi
 	tput el
 	if [ "$HOSTSOK" == "$HOSTS" ] ; then
 		echo -e "$RED""///"$YELLOW" SUMMARY @ $HMS: "$DEF""$LIGHTGRAY"$HOSTSOK"$DEF""$GRAY" of "$DEF""$LIGHTGRAY"$HOSTS"$DEF""$GRAY" hosts are "$LIGHTGREEN"UP"$DEF" "
@@ -201,11 +204,12 @@ gfx splash # Display splash screen with logo
 echo Loading configuration.. # Read from settings.cfg, if exists
 if [ -f settings.cfg ] ; then
 	source settings.cfg
-else
-	echo -e ""$YELLOW"WATCHDOG Warning: "$GRAY"No settings.cfg, defaulting refreshrate to 5 seconds"$DEF""
-	sleep 2
-	REFRESHRATE=5
 fi
+
+echo Validating configuration... # Check if important variables contain anything. If they are empty, default values will be set.
+if [ -z "$REFRESHRATE" ]; then echo -e ""$YELLOW"WATCHDOG Warning: "$GRAY"REFRESHRATE not set, changing REFRESHRATE to 5 seconds."$DEF""; REFRESHRATE=5; sleep 2; fi
+if [ -z "$CUSTOMCMDENABLE" ]; then echo -e ""$YELLOW"WATCHDOG Warning: "$GRAY"CUSTOMCMDENABLE not set, changing CUSTOMCMDENABLE to 0 (disabled)."$DEF""; CUSTOMCMDENABLE=0; sleep 2; fi
+if [ -z "$CUSTOMCMD" ]; then echo -e ""$YELLOW"WATCHDOG Warning: "$GRAY"CUSTOMCMD not set, changing CUSTOMCMDENABLE to 0 (disabled)."$DEF""; CUSTOMCMDENABLE=0; sleep 2; fi
 
 echo Checking hosts.lst..   # Read from hosts.lst, if exists. Otherwise terminate script
 if [ -f hosts.lst ] ; then
