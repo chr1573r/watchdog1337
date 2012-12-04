@@ -167,7 +167,7 @@ summarynext() #Displays a status summary and statistics and waits the number of 
 {
 	echo
 	if [ "$CUSTOMCMDENABLE" == "1" ] ; then # Execute a custom command, if enabled in settings.cfg
-		$CUSTOMCMD
+		eval "$CUSTOMCMD"
 	fi
 	tput el
 	if [ "$HOSTSOK" == "$HOSTS" ] ; then
@@ -213,7 +213,6 @@ if [ -z "$CUSTOMCMD" ]; then echo -e ""$YELLOW"WATCHDOG Warning: "$GRAY"CUSTOMCM
 
 echo Checking hosts.lst..   # Read from hosts.lst, if exists. Otherwise terminate script
 if [ -f hosts.lst ] ; then
-	continue
 else
 	echo -e ""$RED"WATCHDOG ERROR: "$GRAY"Could not locate hosts.lst, terminating script.."$DEF""
 	sleep 3

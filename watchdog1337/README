@@ -1,4 +1,4 @@
-Watchdog1337 readme v.1.1
+Watchdog1337 readme v.1.2
 
 http://csdnserver.com - http://github.com/chr1573r/watchdog1337 
 Written by Christer Jonassen - Cj Designs
@@ -49,8 +49,8 @@ Watchdog1337 continues to run until interrupted by Ctrl-C or killed otherwise.
 
 ## Custom command execution
 As stated previously, Watchdog1337 can be set to execute a custom command after each ping round.
-The complete contents of the variable CUSTOMCMD is executed directly from inside the Watchdog1337 script,
-so make sure it is formatted correctly and that it does not interfere with the continued script execution.
+The complete contents of the variable CUSTOMCMD is executed as: eval "$CUSTOMCMD"
+Make sure you get the formatting and necessary escapes right to avoid interference with the continued script execution.
 
 Please review the source for watchdog1337.sh for ideas.
 You could utilize the set environment variables such as
