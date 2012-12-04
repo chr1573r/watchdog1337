@@ -213,6 +213,7 @@ if [ -z "$CUSTOMCMD" ]; then echo -e ""$YELLOW"WATCHDOG Warning: "$GRAY"CUSTOMCM
 
 echo Checking hosts.lst..   # Read from hosts.lst, if exists. Otherwise terminate script
 if [ -f hosts.lst ] ; then
+	echo "Starting Watchdog1337.."
 else
 	echo -e ""$RED"WATCHDOG ERROR: "$GRAY"Could not locate hosts.lst, terminating script.."$DEF""
 	sleep 3
