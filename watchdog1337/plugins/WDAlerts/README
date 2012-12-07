@@ -1,0 +1,69 @@
+#
+# Watchdog1337 plugin: "Watchdog 1337 (Alerts!)" 
+
+# Referenced as "WDAlerts" in this readme
+#
+# http://csdnserver.com - http://github.com/chr1573r/watchdog1337 
+# Written by Christer Jonassen - Cj Designs
+#
+# WDAlerts.sh is licensed under CC BY-NC-SA 3.0, 
+# other files included is not covered by this licence.
+#
+
+#############################
+# What is WDAlerts?		 	#
+#############################
+A simple "plugin" for Watchdog 1337 (WD1337) which provides
+strong audible and visual alerts based on the status reported by WD1337
+
+As WDAlerts is a plugin, it is not documented to the same degree as WD1337.
+
+#############################
+# Install instructions		#
+#############################
+
+Make sure you have all the requirements for running WD1337 fulfilled.
+You also need a properly configured soundcard, mplayer and festival installed
+
+1.
+Configure options in WDAlerts's settings.cfg file
+2.
+Use the default suggested CUSTOMCMD in WD1337's settings.cfg and enable it
+
+3.
+Start WD1337 and keep it running.
+Make sure that a file called export.txt is generated in the plugins directory
+
+4.
+Start WDAlerts.sh
+
+#############################
+# How does it work?			#
+#############################
+WDAlerts.sh parses information exported by WD1337.
+
+If a one or more hosts are down, WDAlerts flashes the text "RED ALERT" while
+playing the selected alarmsound file.
+After which a summary is provided on screen and read up by the festival speech synthesis.
+
+If no hosts are down, a summary is provided and WDAlerts waits a set number of seconds.
+
+WDAlerts can also easily be paused 3 minutes or until you press a key to continue.
+ 
+
+#############################
+# Technical details:		#
+#############################
+Written in bash, uses both code and output from WD1337
+WDAlerts have the same software pre-requisites as WD1337 but also
+a working soundcard and the two software packages "mplayer" and "festival" 
+
+Should run on the most common Linux distros, 
+but it is developed on the RedHat-based distro ClearOS (www.clearfoundation.com)
+It appears that WD1337 and WDAlerts are compatible with Gentoo as well.
+
+#############################
+# Limitations 				#
+#############################
+WDAlerts does not know if the volume is properly set or muted
+WDAlerts does not know if WD1337 is currently running
