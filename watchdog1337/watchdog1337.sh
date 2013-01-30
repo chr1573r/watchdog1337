@@ -7,8 +7,10 @@
 # Check README for instructions
 
 # Variables
-APPVERSION="1.0 RC1"
+APPVERSION="1.0"
 REDRAW=YES
+DOMAIN=`hostname -d` # Reads the domain part of the hostname, e.g. network.lan
+if [ -z "$DOMAIN" ]; then DOMAIN=hosts; fi # If domain part of hostname is blank, set text to "network"
 
 # Pretty colors for the terminal:
 DEF="\x1b[0m"
@@ -75,7 +77,7 @@ gfx () # Used to display repeating "graphics" where needed
 		subheader)
 			timeupdate
 			tput cup 6 0
-			echo -e "$RED""///"$GRAY" Watching "$YELLOW"`hostname -d`"$GRAY" from "$YELLOW""`hostname -s`" "$RED"/// "$GRAY"Load:`uptime | awk -F'load average:' '{ print $2 }'`"$RED" ///"$GRAY" $HM"$DEF""
+			echo -e "$RED""///"$GRAY" Watching "$YELLOW"$DOMAIN"$GRAY" from "$YELLOW""`hostname -s`" "$RED"/// "$GRAY"Load:`uptime | awk -F'load average:' '{ print $2 }'`"$RED" ///"$GRAY" $HM"$DEF""
 			echo
 			echo
 			;;
@@ -126,7 +128,7 @@ pinghosts() # Parses hosts.lst into variables, pings host, displays output based
 			
 			ping -q -c 2 -n -i 0.2 -W1 $HOSTIP &> /dev/null
 				if [ $? == 0 ]; then
-					HOSTLAT=`ping -q -c 2 -n -i 0.2 -W1 $HOSTIP | tail -1| awk '{print $4}' | cut -d '/' -f 2`
+					HOSTLAT=`ping -q -c $PING_COUNT -n -i $PING_INTERVAL -W $PING_TIMEOUT $HOSTIP | tail -1| awk '{print $4}' | cut -d '/' -f 2`
 					HOSTLAT="$HOSTLAT ms"
 					upforward 53
 					tput el
@@ -204,24 +206,19 @@ clear
 gfx splash # Display splash screen with logo
 
 echo Loading configuration.. # Read from settings.cfg, if exists
-if [ -f settings.cfg ] ; then
-	source settings.cfg
-fi
+if [ -f settings.cfg ] ; then source settings.cfg; fi
 
 echo Validating configuration... # Check if important variables contain anything. If they are empty, default values will be set.
 REFRESHRATE=$1 # Sets $1 as refreshrate, eg "./watchdog1337 100" gives a 100 second refreshrate
 if [ -z "$REFRESHRATE" ]; then echo -e ""$YELLOW"WATCHDOG Warning: "$GRAY"REFRESHRATE not set, changing REFRESHRATE to 5 seconds."$DEF""; REFRESHRATE=5; sleep 2; fi
-if [ -z "$CUSTOMCMDENABLE" ]; then echo -e ""$YELLOW"WATCHDOG Warning: "$GRAY"CUSTOMCMDENABLE not set,\nchanging CUSTOMCMDENABLE to 0 (disabled)."$DEF""; CUSTOMCMDENABLE=0; sleep 2; fi
-if [ -z "$CUSTOMCMD" ]; then echo -e ""$YELLOW"WATCHDOG Warning: "$GRAY"CUSTOMCMD not set, changing CUSTOMCMDENABLE to 0 (disabled)."$DEF""; CUSTOMCMDENABLE=0; sleep 2; fi
+if [ -z "$CUSTOMCMDENABLE" ]; then echo -e ""$YELLOW"WATCHDOG Warning: "$GRAY"CUSTOMCMDENABLE not set, changing CUSTOMCMDENABLE to 0."$DEF""; CUSTOMCMDENABLE=0; sleep 2; fi
+if [ -z "$CUSTOMCMD" ]; then echo -e ""$YELLOW"WATCHDOG Warning: "$GRAY"CUSTOMCMD not set, changing CUSTOMCMDENABLE to 0."$DEF""; CUSTOMCMDENABLE=0; sleep 2; fi
+if [ -z "$PING_COUNT" ]; then echo -e ""$YELLOW"WATCHDOG Warning: "$GRAY"PING_COUNT not set, changing PING_COUNT to 3."$DEF""; PING_COUNT=2; sleep 2; fi
+if [ -z "$PING_INTERVAL" ]; then echo -e ""$YELLOW"WATCHDOG Warning: "$GRAY"PING_INTERVAL not set, changing PING_INTERVAL to 0.3."$DEF""; PING_INTERVAL=0.3; sleep 2; fi
+if [ -z "$PING_TIMEOUT" ]; then echo -e ""$YELLOW"WATCHDOG Warning: "$GRAY"PING_TIMEOUT not set, changing PING_TIMEOUT to 1."$DEF""; PING_TIMEOUT=1; sleep 2; fi
 
 echo Checking hosts.lst..   # Read from hosts.lst, if exists. Otherwise terminate script
-if [ -f hosts.lst ] ; then
-	echo "Starting Watchdog1337.."
-else
-	echo -e ""$RED"WATCHDOG ERROR: "$GRAY"Could not locate hosts.lst, terminating script.."$DEF""
-	sleep 3
-	exit
-fi
+if [ -f hosts.lst ]; then echo "Starting Watchdog1337.."; else echo -e ""$RED"WATCHDOG ERROR: "$GRAY"Could not locate hosts.lst, terminating script.."$DEF""; sleep 3; exit; fi
 
 clear
 gfx header # Display top logo
