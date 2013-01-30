@@ -7,7 +7,7 @@
 # Check README for instructions
 
 # Variables
-APPVERSION="1.0 Beta 2"
+APPVERSION="1.0 RC1"
 REDRAW=YES
 
 # Pretty colors for the terminal:
@@ -85,6 +85,7 @@ gfx () # Used to display repeating "graphics" where needed
 timeupdate() # Sets current time into different variables. Used for timestamping etc.
 {
 	DATE=$(date +"%d-%m-%Y")
+	UNIXSTAMP=$(date +%s)
 	NOWSTAMP=$(date +"%Hh%Mm%Ss")
 	HM=$(date +"%R")
 	HMS=$(date +"%R:%S")
@@ -167,6 +168,7 @@ summarynext() #Displays a status summary and statistics and waits the number of 
 {
 	echo
 	if [ "$CUSTOMCMDENABLE" == "1" ] ; then # Execute a custom command, if enabled in settings.cfg
+		timeupdate
 		eval "$CUSTOMCMD"
 	fi
 	tput el
@@ -207,8 +209,9 @@ if [ -f settings.cfg ] ; then
 fi
 
 echo Validating configuration... # Check if important variables contain anything. If they are empty, default values will be set.
+REFRESHRATE=$1 # Sets $1 as refreshrate, eg "./watchdog1337 100" gives a 100 second refreshrate
 if [ -z "$REFRESHRATE" ]; then echo -e ""$YELLOW"WATCHDOG Warning: "$GRAY"REFRESHRATE not set, changing REFRESHRATE to 5 seconds."$DEF""; REFRESHRATE=5; sleep 2; fi
-if [ -z "$CUSTOMCMDENABLE" ]; then echo -e ""$YELLOW"WATCHDOG Warning: "$GRAY"CUSTOMCMDENABLE not set, changing CUSTOMCMDENABLE to 0 (disabled)."$DEF""; CUSTOMCMDENABLE=0; sleep 2; fi
+if [ -z "$CUSTOMCMDENABLE" ]; then echo -e ""$YELLOW"WATCHDOG Warning: "$GRAY"CUSTOMCMDENABLE not set,\nchanging CUSTOMCMDENABLE to 0 (disabled)."$DEF""; CUSTOMCMDENABLE=0; sleep 2; fi
 if [ -z "$CUSTOMCMD" ]; then echo -e ""$YELLOW"WATCHDOG Warning: "$GRAY"CUSTOMCMD not set, changing CUSTOMCMDENABLE to 0 (disabled)."$DEF""; CUSTOMCMDENABLE=0; sleep 2; fi
 
 echo Checking hosts.lst..   # Read from hosts.lst, if exists. Otherwise terminate script
