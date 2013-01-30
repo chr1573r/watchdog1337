@@ -6,7 +6,7 @@
 # Made possible by the wise *nix people sharing their knowledge and work online
 
 # Variables
-APPVERSION="1.0"
+APPVERSION="1.1"
 # Pretty colors for the terminal:
 DEF="\x1b[0m"
 GRAY="\e[0;37m"
@@ -68,11 +68,11 @@ gfx () # Used to display repeating "graphics" where needed
 				echo -e ""$GRAY"                   Automatic check launching in $COUNTDOWN"$DEF" second(s)."$DEF""
 				echo
 				echo
-				VALGET=NOPE
-				read -t 1 -n 1 -s -p "          Press [w] to wait 3 minutes, [p] to pause, or [x] to exit" VALGET
-					if [ "$VALGET" == "w" ]; then SLEEPIN=YES ; gfx yellow; COUNTDOWN=1; fi
-					if [ "$VALGET" == "p" ]; then SLEEPIN=NO; gfx yellow; COUNTDOWN=1; fi
-					if [ "$VALGET" == "x" ]; then exit ; fi
+				SELECTION=NOPE
+				read -t 1 -n 1 -s -p "          Press [w] to wait $WAITMIN minutes, [p] to pause, or [x] to exit" SELECTION
+					if [ "$SELECTION" == "w" ]; then SLEEPIN=YES ; gfx yellow; COUNTDOWN=1; fi
+					if [ "$SELECTION" == "p" ]; then SLEEPIN=NO; gfx yellow; COUNTDOWN=1; fi
+					if [ "$SELECTION" == "x" ]; then exit ; fi
 				COUNTDOWN=$(( COUNTDOWN - 1 ))
 				tput rc
 				tput el
@@ -92,14 +92,14 @@ gfx () # Used to display repeating "graphics" where needed
 			echo
 			echo
 			if [ "$SLEEPIN" == "NO" ]; then
-				read -n 1 -s -p "               Press any key to continue, or hold [Ctrl-C] to exit" VALGET
+				read -n 1 -s -p "               Press any key to continue, or hold [Ctrl-C] to exit" SELECTION
 			else
 				tput sc
-				SLEEPTIME=180
-				until [ "$SLEEPTIME" == "0" ]; do
-					echo -e "          "$GRAY"Will resume in "$LIGHTYELLOW"$SLEEPTIME"$DEF" "$GRAY"second(s).    (Press [CTRL+C] to exit..)"$DEF""
+				COUNTDOWN=$WAITTIME
+				until [ "$COUNTDOWN" == "0" ]; do
+					echo -e "          "$GRAY"Will resume in "$LIGHTYELLOW"$COUNTDOWN"$DEF" "$GRAY"second(s).    (Press [CTRL+C] to exit..)"$DEF""
 					sleep 1
-					SLEEPTIME=$(( SLEEPTIME - 1 ))
+					COUNTDOWN=$(( COUNTDOWN - 1 ))
 					tput rc
 					tput el
 				done
@@ -127,18 +127,18 @@ gfx () # Used to display repeating "graphics" where needed
 				echo -e ""$GRAY"                   Automatic check launching in $COUNTDOWN"$DEF" second(s)."$DEF""
 				echo
 				echo
-				VALGET=NOPE
-				read -t 1 -n 1 -s -p "          Press [w] to wait 3 minutes, [p] to pause, or [x] to exit" VALGET
-					if [ "$VALGET" == "w" ]; then SLEEPIN=YES ; gfx yellow; COUNTDOWN=1; fi
-					if [ "$VALGET" == "p" ]; then SLEEPIN=NO; gfx yellow; COUNTDOWN=1; fi
-					if [ "$VALGET" == "x" ]; then exit ; fi
+				SELECTION=NOPE
+				read -t 1 -n 1 -s -p "          Press [w] to wait $WAITMIN minutes, [p] to pause, or [x] to exit" SELECTION
+					if [ "$SELECTION" == "w" ]; then SLEEPIN=YES ; gfx yellow; COUNTDOWN=1; fi
+					if [ "$SELECTION" == "p" ]; then SLEEPIN=NO; gfx yellow; COUNTDOWN=1; fi
+					if [ "$SELECTION" == "x" ]; then exit ; fi
 				COUNTDOWN=$(( COUNTDOWN - 1 ))
 				tput rc
 				tput el
 			done
 			;;
 
-		alert) # Flash the text "RED ALERT" while playing a file called alarm.mp3 in the current directory
+		alert) # Flash the text "RED ALERT" while playing the sound file specified in settings.cfg
 			COUNTER=4
 			until [ $COUNTER == 0 ]; do
 
@@ -168,7 +168,7 @@ gfx () # Used to display repeating "graphics" where needed
 	esac
 }
 
-echodeluxe() # Sets current time into different variables. Used for timestamping etc.
+echodeluxe() # Easily the most elegant way to produce 8 empty lines
 {
 ECHOLOOP=8
 until [ $ECHOLOOP == 0 ]; do
@@ -176,6 +176,7 @@ until [ $ECHOLOOP == 0 ]; do
 	ECHOLOOP=$(( ECHOLOOP - 1 ))
 done
 }
+
 # FUNCTIONS END:
 ##################
 
@@ -187,31 +188,16 @@ trap "{ reset; clear;echo Watchdog1337 Alerts! $APPVERSION terminated at `date`;
 gfx splash 
 
 echo Loading configuration.. # Read from settings.cfg, if exists
-if [ -f settings.cfg ] ; then
-	source settings.cfg
-fi
-
+if [ -f settings.cfg ]; then source settings.cfg; fi
 
 echo Validating configuration... # Check if important variables contain anything. If they are empty, default values will be set.
 if [ -z "$REFRESHRATE" ]; then echo -e ""$YELLOW"WATCHDOG Warning: "$GRAY"REFRESHRATE not set, changing REFRESHRATE to 5 seconds."$DEF""; REFRESHRATE=5; sleep 2; fi
+if [ -z "$WAITTIME" ]; then echo -e ""$YELLOW"WATCHDOG Warning: "$GRAY"WAITTIME not set, changing WAITTIME to 180 seconds."$DEF""; WAITTIME=180; sleep 2; fi
 if [ -z "$WDEXPORTFILE" ]; then echo -e ""$RED"WATCHDOG ERROR: "$GRAY"WDEXPORTFILE not set, terminating script.."$DEF""; exit; fi
 if [ -z "$ALERTSOUND" ]; then echo -e ""$YELLOW"WATCHDOG Warning: "$GRAY"ALERTSOUND not set, changing ALERTSOUND to "alert.mp3"."$DEF""; ALERTSOUND=alert.mp3; sleep 2; fi
-
-if [ -f "$WDEXPORTFILE" ] ; then
-	echo WDEXPORT file seems fine
-else
-	echo -e ""$RED"WATCHDOG ERROR: "$GRAY"WDEXPORTFILE "$WDEXPORTFILE" not found, terminating script.."$DEF""
-	sleep 2
-	exit
-fi
-
-if [ -f "$ALERTSOUND" ] ; then
-	echo Alertsound seems fine
-else
-	echo -e ""$YELLOW"WATCHDOG Warning: "$GRAY"ALERTSOUND file "$ALERTSOUND" not found, this will cause errors in the script"$DEF""
-	sleep 2
-fi
-
+if [ -f "$WDEXPORTFILE" ]; then echo -e "WDEXPORT file seems fine"; else echo -e ""$RED"WATCHDOG ERROR: "$GRAY"WDEXPORTFILE "$WDEXPORTFILE" not found, terminating script.."$DEF""; sleep 2; exit; fi
+if [ -f "$ALERTSOUND" ]; then echo Alertsound seems fine; else	echo -e ""$YELLOW"WATCHDOG Warning: "$GRAY"ALERTSOUND file "$ALERTSOUND" not found, this will cause errors in the script"$DEF""; sleep 2; fi
+WAITMIN=$((WAITTIME/60)) # Converts seconds into minutes, used to display the waittime when suspended. Really basic, looks silly if the number of seconds are not divisable by 60 into whole numbers
 
 while true # The script will repeat below until CTRL-C is pressed
 	do
