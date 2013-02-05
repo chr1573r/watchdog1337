@@ -7,11 +7,12 @@
 # Check README for instructions
 
 # Variables
-APPVERSION="1.0"
+APPVERSION="1.1"
 REDRAW=YES
 DOMAIN=`hostname -d` # Reads the domain part of the hostname, e.g. network.lan
 if [ -z "$DOMAIN" ]; then DOMAIN=hosts; fi # If domain part of hostname is blank, set text to "network"
-
+PREVIOUSCOLUMNS=`tput cols`
+PREVIOUSLINES=`tput lines`
 # Pretty colors for the terminal:
 DEF="\x1b[0m"
 WHITE="\e[0;37m"
@@ -166,6 +167,17 @@ upforward() # Move up one line in terminal and jump to horisontal posistion spec
 	#
 	tput cup $Y $1
 }
+
+termreset()
+{
+		echo Terminal size changed, resetting...
+		PREVIOUSCOLUMNS=`tput cols`
+		PREVIOUSLINES=`tput lines`
+		REDRAW=YES
+		reset
+		gfx header
+}
+
 summarynext() #Displays a status summary and statistics and waits the number of seconds determined by REFRESHRATE
 {
 	echo
@@ -191,6 +203,14 @@ summarynext() #Displays a status summary and statistics and waits the number of 
 		tput rc
 		tput el
 	done
+	CURRENTCOLUMNS=`tput cols`
+	CURRENTLINES=`tput lines`
+	if [ "$PREVIOUSCOLUMNS" != "$CURRENTCOLUMNS" ]; then
+		termreset
+
+	elif [ "$PREVIOUSLINES" != "$CURRENTLINES" ]; then
+		termreset
+	fi
 }
 
 
