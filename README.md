@@ -1,9 +1,12 @@
-Watchdog1337 README v.2.0
+Watchdog1337 README v.2.1
 =========================
 
-http://csdnserver.com - http://github.com/chr1573r/watchdog1337 
+http://csdnserver.com - http://github.com/chr1573r/watchdog1337
+
 Written by Christer Jonassen - Cj Designs
+
 Watchdog1337 is licensed under CC BY-NC-SA 3.0.
+
 (check LICENCE file or http://creativecommons.org/licenses/by-nc-sa/3.0/ for details.)
 
 What is Watchdog1337?
@@ -22,22 +25,22 @@ Providing that you have downloaded and unzipped Watchdog1337 on your computer:
 
 ### 1.)
 Add the hosts you want to monitor to the file named "hosts.lst" in the following format:
-<name>:<location>:<ip>
+`<name>:<location>:<ip>`
 One host per line.
-Also, there must be a blank line at the end of hosts.lst, or else the last host
+Also, there must be a blank line at the end of `hosts.lst`, or else the last host
 will be ignored due to a parsing limitation in Watchdog1337. 
 
 ### 2.)
-(Optional: Set the "REFRESHRATE=" number in the file settings.cfg if you want a shorter or longer
+(Optional: Set the `REFRESHRATE` number in the file settings.cfg if you want a shorter or longer
 waiting period before hosts are re-checked. Default is 5 seconds.
 You can also add a custom command in settings.cfg that will be executed after each ping round.
 Read more about the custom cmd further below)
 
 ### 3.)
 Give watchdog1337.sh permission to run by executing the following command:
-chmod +x watchdog1337.sh
+`chmod +x watchdog1337.sh`
 That's pretty much it! You can now start Watchdog1337 by executing the following:
-./watchdog1337.sh 
+`./watchdog1337.sh`
  
 
 How does it work?
@@ -47,7 +50,7 @@ Watchdog reads host information from the file hosts.lst and settings from settin
 It then pings all the hosts from hosts.lst in order and returns the exit code of the ping. 
 If a host does not respond, the host is highlighted in red until it responds or are removed from hosts.lst. 
 After pinging all hosts, Watchdog1337 provides a short summary and waits a specified number of seconds before pinging them again. 
-Watchdog1337 continues to run until interrupted by Ctrl-C or killed otherwise. 
+Watchdog1337 continues to run until interrupted by `Ctrl-C` or killed otherwise. 
  
 
 Custom command execution
@@ -56,7 +59,7 @@ Custom command execution
 As stated previously, Watchdog1337 can be set to execute a custom command after each ping round.
 The complete contents of the variable CUSTOMCMD is executed as: eval "$CUSTOMCMD"
 Working example that can be set in settings.cfg:
-CUSTOMCMD='echo $HOSTS > /tmp/totalhosts.txt'        #This writes the total number of hosts to the file /tmp/totalhosts.txt
+`CUSTOMCMD='echo $HOSTS > /tmp/totalhosts.txt'        #This writes the total number of hosts to the file /tmp/totalhosts.txt`
 
 Make sure you get the formatting and necessary escapes right, otherwise Watchdog1337 won't work.
 Study the Watchdog1337.sh sourcecode to find variables that might be interesting in combination with CUSTOMCMD
@@ -66,7 +69,7 @@ Technical details:
 ------------------
 
 Written in bash, uses ping to determine host status. 
-Besides bash, the following common binaries are used: ping, uptime, tput, date, sleep, awk, tail, cut. 
+Besides bash, the following common binaries are used: `ping`, `uptime`, `hostname`, `tput`, `date`, `sleep`, `awk`, `tail`, `cut`. 
 Should run on the most common Linux distros, 
 but it has only been tested properly on the RedHat-based distro ClearOS (www.clearfoundation.com)
 
