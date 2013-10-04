@@ -227,15 +227,15 @@ gfx splash # Display splash screen with logo
 
 echo Loading configuration.. # Read from settings.cfg, if exists
 if [ -f settings.cfg ] ; then source settings.cfg; fi
+if [ -n "$1" ]; then REFRESHRATE=$1; fi # Sets $1 as refreshrate, if it is not null. Overrides value set in settings.cfg
 
 echo Validating configuration... # Check if important variables contain anything. If they are empty, default values will be set.
-REFRESHRATE=$1 # Sets $1 as refreshrate, eg "./watchdog1337 100" gives a 100 second refreshrate
-if [ -z "$REFRESHRATE" ]; then echo -e ""$YELLOW"WATCHDOG Warning: "$GRAY"REFRESHRATE not set, changing REFRESHRATE to 5 seconds."$DEF""; REFRESHRATE=5; sleep 2; fi
-if [ -z "$CUSTOMCMDENABLE" ]; then echo -e ""$YELLOW"WATCHDOG Warning: "$GRAY"CUSTOMCMDENABLE not set, changing CUSTOMCMDENABLE to 0."$DEF""; CUSTOMCMDENABLE=0; sleep 2; fi
-if [ -z "$CUSTOMCMD" ]; then echo -e ""$YELLOW"WATCHDOG Warning: "$GRAY"CUSTOMCMD not set, changing CUSTOMCMDENABLE to 0."$DEF""; CUSTOMCMDENABLE=0; sleep 2; fi
-if [ -z "$PING_COUNT" ]; then echo -e ""$YELLOW"WATCHDOG Warning: "$GRAY"PING_COUNT not set, changing PING_COUNT to 3."$DEF""; PING_COUNT=2; sleep 2; fi
-if [ -z "$PING_INTERVAL" ]; then echo -e ""$YELLOW"WATCHDOG Warning: "$GRAY"PING_INTERVAL not set, changing PING_INTERVAL to 0.3."$DEF""; PING_INTERVAL=0.3; sleep 2; fi
-if [ -z "$PING_TIMEOUT" ]; then echo -e ""$YELLOW"WATCHDOG Warning: "$GRAY"PING_TIMEOUT not set, changing PING_TIMEOUT to 1."$DEF""; PING_TIMEOUT=1; sleep 2; fi
+if [ -z "$REFRESHRATE" ]; then echo -e ""$YELLOW"WATCHDOG Warning: "$GRAY"REFRESHRATE not set, changing REFRESHRATE to 5 seconds."$DEF""; REFRESHRATE=5; sleep 1; fi
+if [ -z "$CUSTOMCMDENABLE" ]; then echo -e ""$YELLOW"WATCHDOG Warning: "$GRAY"CUSTOMCMDENABLE not set, changing CUSTOMCMDENABLE to 0."$DEF""; CUSTOMCMDENABLE=0; sleep 1; fi
+if [ -z "$CUSTOMCMD" ]; then echo -e ""$YELLOW"WATCHDOG Warning: "$GRAY"CUSTOMCMD not set, changing CUSTOMCMDENABLE to 0."$DEF""; CUSTOMCMDENABLE=0; sleep 1; fi
+if [ -z "$PING_COUNT" ]; then echo -e ""$YELLOW"WATCHDOG Warning: "$GRAY"PING_COUNT not set, changing PING_COUNT to 3."$DEF""; PING_COUNT=3; sleep 1; fi
+if [ -z "$PING_INTERVAL" ]; then echo -e ""$YELLOW"WATCHDOG Warning: "$GRAY"PING_INTERVAL not set, changing PING_INTERVAL to 0.3."$DEF""; PING_INTERVAL=0.3; sleep 1; fi
+if [ -z "$PING_TIMEOUT" ]; then echo -e ""$YELLOW"WATCHDOG Warning: "$GRAY"PING_TIMEOUT not set, changing PING_TIMEOUT to 1."$DEF""; PING_TIMEOUT=1; sleep 1; fi
 
 echo Checking hosts.lst..   # Read from hosts.lst, if exists. Otherwise terminate script
 if [ -f hosts.lst ]; then echo "Starting Watchdog1337.."; else echo -e ""$RED"WATCHDOG ERROR: "$GRAY"Could not locate hosts.lst, terminating script.."$DEF""; sleep 3; exit; fi
