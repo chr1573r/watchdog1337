@@ -1,4 +1,4 @@
-Watchdog1337 README v.2.3
+Watchdog1337 README v.2.3.1
 =========================
 http://csdnserver.com - http://github.com/chr1573r/watchdog1337
 
@@ -39,7 +39,7 @@ Give watchdog1337.sh permission to run by executing the following command:
 
 That's pretty much it! You can now start Watchdog1337 by executing the following:
 `./watchdog1337.sh`
- 
+
 
 How does it work?
 -----------------
@@ -50,7 +50,8 @@ It then pings all the hosts from hosts.lst in order and returns the exit code of
 If a host does not respond, the host is highlighted in red until it responds or are removed from hosts.lst. 
 
 After pinging all hosts, Watchdog1337 provides a short summary
-and waits a specified number of seconds before pinging them again. 
+and waits a specified number of seconds* before pinging them again.
+(* Set in settings.cfg or directly upon execution, e.g `./watchdog1337.sh 300` for 5 minute intervals) 
 
 Watchdog1337 continues to run until interrupted by `Ctrl-C` or killed otherwise. 
  
@@ -91,7 +92,7 @@ so keep this in mind if you want to display all hosts at the same time.
 While only tested briefly, Watchdog1337 does not function properly on
 Mac OS X 10.6 or the FreeBSD distro pfSense. (When executed natively of course, not ssh sessions)
 
-If you somehow should get an empty line or partially missing textwhen the last host is pinged,
+If you somehow should get an empty line or partially missing text when the last host is pinged,
 try adding a blank line at the end of `hosts.lst`.
  
 Also remember that Watchdog1337 is very simple and only determines host status by ping. 
