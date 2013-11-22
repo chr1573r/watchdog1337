@@ -30,6 +30,21 @@ YELLOW="\x1b[33;11m"
 ##################
 # FUNCTIONS BEGIN:
 
+wdwait ()
+{
+	SLEEPIN=YES
+	gfx yellow
+	COUNTDOWN=1
+}
+
+
+wdpause ()
+{
+	SLEEPIN=NO
+	gfx yellow
+	COUNTDOWN=1
+}
+
 gfx () # Used to display repeating "graphics" where needed
 {
 	case "$1" in
@@ -70,9 +85,43 @@ gfx () # Used to display repeating "graphics" where needed
 				echo
 				SELECTION=NOPE
 				read -t 1 -n 1 -s -p "          Press [w] to wait $WAITMIN minutes, [p] to pause, or [x] to exit" SELECTION
-					if [ "$SELECTION" == "w" ]; then SLEEPIN=YES ; gfx yellow; COUNTDOWN=1; fi
-					if [ "$SELECTION" == "p" ]; then SLEEPIN=NO; gfx yellow; COUNTDOWN=1; fi
-					if [ "$SELECTION" == "x" ]; then exit ; fi
+				case "$SELECTION" in
+					w)
+						wdwait
+						;;
+					1)
+						wdwait
+						;;
+					3)
+						wdwait
+						;;
+					5)
+						wdwait
+						;;
+					7)
+						wdwait
+						;;
+
+					p)
+						wdpause
+						;;
+					2)
+						wdpause
+						;;
+					4)
+						wdpause
+						;;
+					6)
+						wdpause
+						;;
+					8)
+						wdpause
+						;;
+						
+					x)
+						exit
+						;;
+				esac
 				COUNTDOWN=$(( COUNTDOWN - 1 ))
 				tput rc
 				tput el
@@ -129,9 +178,43 @@ gfx () # Used to display repeating "graphics" where needed
 				echo
 				SELECTION=NOPE
 				read -t 1 -n 1 -s -p "          Press [w] to wait $WAITMIN minutes, [p] to pause, or [x] to exit" SELECTION
-					if [ "$SELECTION" == "w" ]; then SLEEPIN=YES ; gfx yellow; COUNTDOWN=1; fi
-					if [ "$SELECTION" == "p" ]; then SLEEPIN=NO; gfx yellow; COUNTDOWN=1; fi
-					if [ "$SELECTION" == "x" ]; then exit ; fi
+				case "$SELECTION" in
+					w)
+						wdwait
+						;;
+					1)
+						wdwait
+						;;
+					3)
+						wdwait
+						;;
+					5)
+						wdwait
+						;;
+					7)
+						wdwait
+						;;
+
+					p)
+						wdpause
+						;;
+					2)
+						wdpause
+						;;
+					4)
+						wdpause
+						;;
+					6)
+						wdpause
+						;;
+					8)
+						wdpause
+						;;
+
+					x)
+						exit
+						;;
+				esac
 				COUNTDOWN=$(( COUNTDOWN - 1 ))
 				tput rc
 				tput el
