@@ -117,7 +117,9 @@ gfx () # Used to display repeating "graphics" where needed
 					8)
 						wdpause
 						;;
-						
+					9)
+						gfx alert
+						;;
 					x)
 						exit
 						;;
@@ -209,6 +211,9 @@ gfx () # Used to display repeating "graphics" where needed
 						;;
 					8)
 						wdpause
+						;;
+					9)
+						gfx alert
 						;;
 
 					x)
