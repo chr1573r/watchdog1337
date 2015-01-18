@@ -1,0 +1,13 @@
+# Changes to color palette
+export MAINCOLOR1="\x1b[32;11m" # green
+export MAINCOLOR2="\x1b[37;11m" # white
+
+# Custom header
+HEADER1="$(gfx line)"
+HEADER2=""$MAINCOLOR1"   "$MAINCOLOR2"              ____  ____  ____  _  _   ____  ____  ____  _ _ _ "$DEF""
+HEADER3=""$MAINCOLOR1" WD"$MAINCOLOR2"1337 >       _| __  |___  |___  |_/   _|     |__/  |___  | | | "$DEF""
+HEADER4=""$MAINCOLOR1"   "$MAINCOLOR2"              |__]  |___  |___  | \_   |___  |  \  |___  |_|_| "$DEF""
+HEADER5="$(gfx line)"
+
+# Custom slimheader
+SLIMHEADER=""$MAINCOLOR1"/// * "$MAINCOLOR2"GEEKCREW "$MAINCOLOR1"///"$MAINTEXTCOLOR" WD1337 for "$MAINCOLOR2"$DOMAIN"$MAINTEXTCOLOR" from "$MAINCOLOR2""$(hostname -s)""

@@ -1,4 +1,4 @@
-Watchdog1337 README v.2.3.1
+Watchdog1337 README v.2.4.0
 =========================
 http://csdnserver.com - http://github.com/chr1573r/watchdog1337
 
@@ -14,7 +14,7 @@ What is Watchdog1337?
 
 Watchdog1337 is a simple network monitoring script written in bash. 
 It pings the desired hosts in a fixed time interval and displays the status. 
-If there are 10 or less hosts, the output fits nicely within a standard 80x24 PuTTY window.
+If there are 10 or less hosts, the output fits nicely within a standard 80x24 terminal window.
 
 
 Install instructions
@@ -31,7 +31,7 @@ One host per line.
 ### 2. Check settings
 Revise default options set in `settings.cfg` and change them if you need to.
 You can also add a custom command in `settings.cfg` that will be executed after each ping round.
-Read more about the custom cmd further below)
+(Read more about the custom cmd further below)
 
 ### 3. Permit and execute
 Give watchdog1337.sh permission to run by executing the following command:
@@ -74,26 +74,29 @@ Technical details:
 
 Written in bash, uses ping to determine host status. 
 Besides bash, the following common binaries are used:
-`ping`, `uptime`, `hostname`, `tput`, `date`, `sleep`, `awk`, `tail`, `cut`. 
+`ping`, `uptime`, `hostname`, `tput`, `date`, `sleep`, `awk`, `tail`, `cut`.
+For parallel mode, install GNU parallel
+
 Should run on the most common Linux distros, 
 but it has only been tested properly on the RedHat-based
-distro ClearOS (www.clearfoundation.com)
+distro ClearOS (www.clearfoundation.com), Raspian and Ubuntu
 
 
 Limitations
 -----------
 
-There are no limitation on the number of hosts, but keep in mind that hosts are pinged one at a time,
+There are no limitation on the number of hosts, but keep in mind that hosts are pinged one at a time(*),
 and thus you won't know the status of the first host again before the last host is pinged (and after the set wait period)
 
 Each host consumes one(1) line in the console output,
 so keep this in mind if you want to display all hosts at the same time.
 
-While only tested briefly, Watchdog1337 does not function properly on
-Mac OS X 10.6 or the FreeBSD distro pfSense. (When executed natively of course, not ssh sessions)
+While only tested briefly, Watchdog1337 does not run _natively_ on Mac OS X or pfSense.
 
 If you somehow should get an empty line or partially missing text when the last host is pinged,
 try adding a blank line at the end of `hosts.lst`.
  
 Also remember that Watchdog1337 is very simple and only determines host status by ping. 
 It can not tell if apache is denying connections on your webserver, unfortunately ;)
+
+* From version 2.0 and up, you can activate that all hosts are pinged in parallel (experimental)
