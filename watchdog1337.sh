@@ -281,9 +281,9 @@ pingprep()
 	done < hosts.lst
 
 	export PROGRESSPRINT=YES
-	parallel -no-notice -k -j0 pinghostsparallel :::: hosts-autogen.lst
+	parallel --no-notice -k -j0 pinghostsparallel :::: hosts-autogen.lst
 	export PROGRESSPRINT=NO
-	parallel -no-notice -k -j0 pinghostsparallel :::: hosts-autogen.lst
+	parallel --no-notice -k -j0 pinghostsparallel :::: hosts-autogen.lst
 
 	while read -r HOSTSTAT
 		do
