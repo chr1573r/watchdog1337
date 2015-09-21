@@ -7,7 +7,7 @@
 # Check README for instructions
 
 # Variables
-export APPVERSION="2.0"
+export APPVERSION="2.1"
 export REDRAW=YES
 export LOOP=true
 export DOMAIN=$(hostname -d) # Reads the domain part of the hostname, e.g. network.lan
@@ -42,8 +42,7 @@ export MAINCOLOR2="\x1b[33;11m"
 export MAINTEXTCOLOR="\x1b[37;11m"
 
 ### White
-export HIGHLIGHT_MAINTEXTCOLOR="\e[0;37m"
-
+export HIGHLIGHT_MAINTEXTCOLOR="\x1b[37;1m"
 ### Green
 export COLOR_OK="\x1b[32;11m"
 
@@ -116,7 +115,7 @@ gfx () # Used to display repeating "graphics" where needed
 			if [[ "$SLIM" != "1" ]]; then
 				timeupdate
 				tput cup 6 0
-				echo -e "$MAINCOLOR1""///"$MAINTEXTCOLOR" Watching "$MAINCOLOR2"$DOMAIN"$MAINTEXTCOLOR" from "$MAINCOLOR2""$(hostname -s)" "$MAINCOLOR1"/// "$MAINTEXTCOLOR"Load:$(uptime | awk -F'load average:' '{ print $2 }')"$MAINCOLOR1" ///"$MAINTEXTCOLOR" $HM"$DEF""
+				echo -e ""$MAINCOLOR1"///"$MAINTEXTCOLOR" Watching "$MAINCOLOR2"$DOMAIN"$MAINTEXTCOLOR" from "$MAINCOLOR2""$(hostname -s)" "$MAINCOLOR1"/// "$MAINTEXTCOLOR"Load: $(uptime | awk -F': ' '{ print $2 }')"$MAINCOLOR1" ///"$MAINTEXTCOLOR" $HM"$DEF""
 				echo
 				echo
 			else
@@ -191,6 +190,7 @@ pinghosts() # Parses hosts.lst into variables, pings host, displays output based
 	HOSTS=0
 	HOSTSOK=0
 	HOSTSDOWN=0
+	HOSTLAT=none
 	if [ "$REDRAW" == "YES" ] ; then printheader; fi
 		#if [ "$REDRAW" == "YES" ] ; then echo -e ""$DEF""$HIGHLIGHT_LABEL_PING"NAME           LOCATION             ADDRESS           AVG.LATENCY        STATUS"$DEF""; gfx line; fi
 
@@ -202,7 +202,7 @@ pinghosts() # Parses hosts.lst into variables, pings host, displays output based
 			HOSTDESC=$(echo $HOSTENTRY | awk -F":" '{print $1}' $2)
 			HOSTLOC=$(echo $HOSTENTRY | awk -F":" '{print $2}' $2)
 			HOSTIP=$(echo $HOSTENTRY | awk -F":" '{print $3}' $2)
-			#echo YOLO $HOSTENTRY BRO $HOSTDESC $HOSTLOC $HOSTIP $Y
+
 			if [ "$REDRAW" == "YES" ] ; then
 				tput el
 				upforward 0
@@ -215,26 +215,29 @@ pinghosts() # Parses hosts.lst into variables, pings host, displays output based
 			fi
 			
 			upforward 53	
-			echo -e " "$HIGHLIGHT_MAINTEXTCOLOR"[   "$HIGHLIGHT_LABEL_PING"Ping in progress..  "$HIGHLIGHT_MAINTEXTCOLOR"]"$DEF""
+			echo -e " "$DEF""$HIGHLIGHT_MAINTEXTCOLOR"[   "$HIGHLIGHT_LABEL_PING"Ping in progress..  "$HIGHLIGHT_MAINTEXTCOLOR"]"$DEF""
 			# Currently, we execute ping up to two times per host. This is due to parcing replacing the exit code from ping. Hopefully a better solution will be found later.
 			ping -q -c $PING_COUNT -n -i $PING_INTERVAL -W $PING_TIMEOUT $HOSTIP &> /dev/null	# Ping first to get exit code
 				if [ $? == 0 ]; then
+					PINGCODE=$?
 					HOSTLAT=$(ping -q -c $PING_COUNT -n -i $PING_INTERVAL -W $PING_TIMEOUT $HOSTIP | tail -1 | awk '{print $4}' | cut -d '/' -f 2) &> /dev/null # ping again to get avg latency parced
+					HOSTLATINT=$(echo $HOSTLAT | awk -F"." '{print $1}')
 					HOSTLAT="$HOSTLAT ms"
 					upforward 53
 					tput el
+					if [[ $HOSTLATINT -gt 20 ]]; then
+					echo -e " "$HIGHLIGHT_LABEL_PING"$HOSTLAT"
+					else
 					echo -e " "$MAINTEXTCOLOR"$HOSTLAT"
-					upforward 63
-					echo -e "          "$DEF""$MAINTEXTCOLOR"[ "$COLOR_OK"UP"$DEF""$MAINTEXTCOLOR" ] "$DEF""
+					fi
+					
+					upforward 65
+					echo -e "        "$DEF""$MAINTEXTCOLOR"[ "$COLOR_OK"UP"$DEF""$MAINTEXTCOLOR" ] "$DEF""
 					HOSTSOK=$(( HOSTSOK + 1))
 				else
 					PINGCODE=$?
+					HOSTLAT=none
 					tput el
-#					tput bold
-#					tput setab 1
-#					tput setaf 7
-#					upforward 0
-#					echo "                                                                               "
 					upforward 0
 					echo -e ""$DEF""$HIGHLIGHT_ERROR"$HOSTDESC"
 					upforward 14
@@ -248,6 +251,16 @@ pinghosts() # Parses hosts.lst into variables, pings host, displays output based
 					HOSTSDOWN=$(( HOSTSDOWN + 1))
 					REDRAW=YES # Redraw next host pinged
 				fi
+
+				if [[ "$CUSTOMCMDENABLE" == "1" ]]; then
+					timeupdate
+					if [[ "$PINGCODE" == "0" ]]; then
+						eval "$CUSTOMCMDUP"
+					else
+						eval "$CUSTOMCMDDOWN"
+					fi
+				fi
+
 		done < hosts.lst
 		if [ "$HOSTSOK" == "$HOSTS" ] ; then REDRAW=NO; else REDRAW=YES; fi # If any hosts failed, we want to redraw next round
 }
@@ -264,16 +277,21 @@ pingprep()
 	echo -n > .hosts-ok
 	HOSTSDOWN=0
 	echo -n > .hosts-down
+	HOSTLAT=none
 	if [ "$REDRAW" == "YES" ] ; then printheader; fi
 	
 	export -f pinghostsparallel
 	export -f upforward
+	export -f timeupdate
+	export CUSTOMCMDENABLE
+	export CUSTOMCMDUP
+	export CUSTOMCMDDOWN
 	export PING_COUNT
 	export PING_INTERVAL
 	export PING_TIMEOUT
 	export REDRAW
 	export Y
-
+#STAPH
 	rm hosts-autogen.lst &> /dev/null
 	while read -r HOSTENTRY; do
 		Y=$(( Y + 1 ))
@@ -302,18 +320,17 @@ pingprep()
 
 pinghostsparallel()
 {
-	HOSTDESC=$(echo $1 | awk -F":" '{print $1}' $2)
-	HOSTLOC=$(echo $1 | awk -F":" '{print $2}' $2)
-	HOSTIP=$(echo $1 | awk -F":" '{print $3}' $2)
-	Y=$(echo $1 | awk -F":" '{print $4}' $2)
+	HOSTENTRY=$1
+	HOSTDESC=$(echo $HOSTENTRY | awk -F":" '{print $1}' $2)
+	HOSTLOC=$(echo $HOSTENTRY | awk -F":" '{print $2}' $2)
+	HOSTIP=$(echo $HOSTENTRY | awk -F":" '{print $3}' $2)
+	Y=$(echo $HOSTENTRY | awk -F":" '{print $NF}' $2)
 
 	if [[ "$PROGRESSPRINT" == "YES" ]]; then
 
-		#echo -n "$HOSTDESC, $HOSTLOC, $HOSTIP : "
 		if [ "$REDRAW" == "YES" ] ; then
 		tput el
 		upforward 0
-		#echo "                                                                               "
 		echo -e ""$MAINTEXTCOLOR"$HOSTDESC"
 		upforward 14
 		echo -e " "$MAINTEXTCOLOR"$HOSTLOC"
@@ -322,29 +339,36 @@ pinghostsparallel()
 		fi
 
 		upforward 53	
-		echo -e " "$MAINTEXTCOLOR"[   "$HIGHLIGHT_LABEL_PING"Ping in progress..  "$MAINTEXTCOLOR"]"$DEF""
+		echo -e " "$DEF""$HIGHLIGHT_MAINTEXTCOLOR"[   "$HIGHLIGHT_LABEL_PING"Ping in progress..  "$HIGHLIGHT_MAINTEXTCOLOR"]"$DEF""
 
 	else
 
 		upforward 54
 		ping -q -c 2 -n -i 0.2 -W1 $HOSTIP &> /dev/null
 			if [ $? == 0 ]; then
+				PINGCODE=$?
 				HOSTLAT=`ping -q -c $PING_COUNT -n -i $PING_INTERVAL -W $PING_TIMEOUT $HOSTIP | tail -1| awk '{print $4}' | cut -d '/' -f 2`
+				HOSTLATINT=$(echo $HOSTLAT | awk -F"." '{print $1}')
 				HOSTLAT="$HOSTLAT ms"
 				upforward 53
 				tput el
-				echo -e " "$MAINTEXTCOLOR"$HOSTLAT"
-				upforward 63
-				echo -e "          "$DEF""$MAINTEXTCOLOR"[ "$COLOR_OK"UP"$DEF""$MAINTEXTCOLOR" ] "$DEF""
+					if [[ $HOSTLATINT -gt 20 ]]; then
+					echo -e " "$HIGHLIGHT_LABEL_PING"$HOSTLAT"
+					else
+					echo -e " "$MAINTEXTCOLOR"$HOSTLAT"
+					fi
+				upforward 65
+				echo -e "        "$DEF""$MAINTEXTCOLOR"[ "$COLOR_OK"UP"$DEF""$MAINTEXTCOLOR" ] "$DEF""
 				echo 1 >> .hosts-ok
 			else
 				PINGCODE=$?
+				HOSTLAT=none
 				tput el
 				upforward 0
 				echo -e ""$DEF""$HIGHLIGHT_ERROR"$HOSTDESC"
 				upforward 14
 				echo -e " "$DEF""$HIGHLIGHT_ERROR"$HOSTLOC"
-				upforward 35
+				upforward 35&& 
 				echo -e " "$DEF""$HIGHLIGHT_ERROR"$HOSTIP"
 				upforward 53
 				echo -e " "$DEF""$HIGHLIGHT_ERROR"Ping exitcode: $PINGCODE"
@@ -352,6 +376,15 @@ pinghostsparallel()
 				echo -e "   "$DEF""$MAINTEXTCOLOR"["$DEF""$HIGHLIGHT_ERROR"DOWN"$DEF""$MAINTEXTCOLOR"] "$DEF""
 				echo 1 >> .hosts-down
 				export REDRAW=YES # Redraw next host pinged
+			fi
+
+			if [[ "$CUSTOMCMDENABLE" == "1" ]]; then
+				timeupdate
+				if [[ "$PINGCODE" == "0" ]]; then
+					eval "$CUSTOMCMDUP"
+				else
+					eval "$CUSTOMCMDDOWN"
+				fi
 			fi
 
 	fi
@@ -362,7 +395,7 @@ summarynext() #Displays a status summary and statistics and waits the number of 
 	echo
 	if [ "$CUSTOMCMDENABLE" == "1" ] ; then # Execute a custom command, if enabled in settings.cfg
 		timeupdate
-		eval "$CUSTOMCMD"
+		eval "$CUSTOMCMDROUND"
 	fi
 	tput el
 	if [ "$HOSTSOK" == "$HOSTS" ] ; then
@@ -420,7 +453,9 @@ if [ -z "$COL2" ]; then echo -e ""$MAINCOLOR2"WATCHDOG Warning: "$MAINTEXTCOLOR"
 if [ -n "$THEME" ]; then if [ -f "$THEME" ]; then source $THEME; else echo -e ""$MAINCOLOR2"WATCHDOG Warning:"; echo -e ""$MAINTEXTCOLOR"Theme "$THEME" could not be found, fallback to built-in theme."$DEF""; fi; fi 
 if [ -z "$REFRESHRATE" ]; then echo -e ""$MAINCOLOR2"WATCHDOG Warning: "$MAINTEXTCOLOR"REFRESHRATE not set, changing REFRESHRATE to 5 seconds."$DEF""; REFRESHRATE=5; sleep 1; fi
 if [ -z "$CUSTOMCMDENABLE" ]; then echo -e ""$MAINCOLOR2"WATCHDOG Warning: "$MAINTEXTCOLOR"CUSTOMCMDENABLE not set, changing CUSTOMCMDENABLE to 0."$DEF""; CUSTOMCMDENABLE=0; sleep 1; fi
-if [ -z "$CUSTOMCMD" ]; then echo -e ""$MAINCOLOR2"WATCHDOG Warning: "$MAINTEXTCOLOR"CUSTOMCMD not set, changing CUSTOMCMDENABLE to 0."$DEF""; CUSTOMCMDENABLE=0; sleep 1; fi
+if [ -z "$CUSTOMCMDUP" ]; then echo -e ""$MAINCOLOR2"WATCHDOG Warning: "$MAINTEXTCOLOR"CUSTOMCMDUP not set, changing CUSTOMCMDENABLE to 0."$DEF""; CUSTOMCMDENABLE=0; sleep 1; fi
+if [ -z "$CUSTOMCMDDOWN" ]; then echo -e ""$MAINCOLOR2"WATCHDOG Warning: "$MAINTEXTCOLOR"CUSTOMCMDDOWN not set, changing CUSTOMCMDENABLE to 0."$DEF""; CUSTOMCMDENABLE=0; sleep 1; fi
+if [ -z "$CUSTOMCMDROUND" ]; then echo -e ""$MAINCOLOR2"WATCHDOG Warning: "$MAINTEXTCOLOR"CUSTOMCMDROUND not set, changing CUSTOMCMDENABLE to 0."$DEF""; CUSTOMCMDENABLE=0; sleep 1; fi
 if [ -z "$PING_COUNT" ]; then echo -e ""$MAINCOLOR2"WATCHDOG Warning: "$MAINTEXTCOLOR"PING_COUNT not set, changing PING_COUNT to 3."$DEF""; PING_COUNT=3; sleep 1; fi
 if [ -z "$PING_INTERVAL" ]; then echo -e ""$MAINCOLOR2"WATCHDOG Warning: "$MAINTEXTCOLOR"PING_INTERVAL not set, changing PING_INTERVAL to 0.3."$DEF""; PING_INTERVAL=0.3; sleep 1; fi
 if [ -z "$PING_TIMEOUT" ]; then echo -e ""$MAINCOLOR2"WATCHDOG Warning: "$MAINTEXTCOLOR"PING_TIMEOUT not set, changing PING_TIMEOUT to 1."$DEF""; PING_TIMEOUT=1; sleep 1; fi

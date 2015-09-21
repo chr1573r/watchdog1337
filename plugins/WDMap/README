@@ -1,0 +1,71 @@
+#
+# Watchdog1337 plugin: "Watchdog 1337 Map" 
+
+# Referenced as "WDMap" in this readme
+#
+# http://csdnserver.com - http://github.com/chr1573r/watchdog1337 
+# Written by Christer Jonassen - Cj Designs
+#
+# WDMap.sh is licensed under CC BY-NC-SA 3.0, 
+# other files included is not covered by this licence.
+#
+
+#############################
+# What is WDMap?		 	#
+#############################
+An experimental "plugin" for Watchdog 1337 (WD1337) which provides
+a way to illustrate host statuses from WD1337 in an ascii map representation.
+
+As WDMap is a plugin, it is not documented to the same degree as WD1337.
+
+#############################
+# Install instructions		#
+#############################
+
+Make sure you have all the requirements for running WD1337 fulfilled.
+
+
+1.
+Add the desired unique tags as the forth field in WD1337s hosts.lst.
+E.g., Gateway:Server room:10.0.0.1:GW
+In this case, GW is the unique tag for the host.
+2.
+The unique host tag you added, will be recognized by WDMap.
+This means that when you create an ASCII map of your network, add the
+unique tags to your drawing, as only these tags will change color depending on host status
+E.g:
+|GW|----|CORE|----|INTERNET|
+
+3.
+Start WD1337 after you check the custom cmds are activated in settings.cfg of WD1337
+View the repo if they are not present in your config.
+
+4.
+Start WDMap.sh
+
+#############################
+# How does it work?			#
+#############################
+WDMap.sh parses information exported by WD1337.
+
+WDMap prints out the map.txt to your terminal, and colors unique hoststags depending on status
+So if the host is up, its tag is printed in green, otherwise in red.
+
+WDMap will also warn you if the terminal size is not big enough for the drawing.
+ 
+
+#############################
+# Technical details:		#
+#############################
+Written in bash, uses both code and output from WD1337
+WDMap have the same software pre-requisites as WD1337
+
+Should run on the most common Linux distros, 
+has been tested extensivly with Raspian
+
+#############################
+# Limitations 				#
+#############################
+WDMap may slow down after running a while, this will be improved later.
+WDMap does not have a configurable settingsfile yet.
+WDMap does not know if WD1337 is currently running

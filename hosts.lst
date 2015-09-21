@@ -1,2 +1,2 @@
-Gateway:Server room:192.168.1.1
-Google:USA:google.com
+Gateway:Server room:192.168.1.1:GW
+Google:USA:google.com:Google

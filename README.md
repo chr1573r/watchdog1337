@@ -1,4 +1,4 @@
-Watchdog1337 README v.2.4.0
+Watchdog1337 README v.2.4.1
 =========================
 http://csdnserver.com - http://github.com/chr1573r/watchdog1337
 
@@ -46,6 +46,7 @@ How does it work?
 
 Watchdog reads host information from the file hosts.lst and settings from settings.cfg. 
 It then pings all the hosts from hosts.lst in order and returns the exit code of the ping.
+You can choose whether this is done in parallel or sequential (default)
 
 If a host does not respond, the host is highlighted in red until it responds or are removed from hosts.lst. 
 
@@ -59,14 +60,11 @@ Watchdog1337 continues to run until interrupted by `Ctrl-C` or killed otherwise.
 Custom command execution
 ------------------------
 
-As stated previously, Watchdog1337 can be set to execute a custom command after each ping round.
-The complete contents of the variable CUSTOMCMD is executed as: `eval "$CUSTOMCMD"`
-Working example that can be set in settings.cfg:
-`CUSTOMCMD='echo $HOSTS > /tmp/totalhosts.txt'        #This writes the total number of hosts to the file /tmp/totalhosts.txt`
+As stated previously, Watchdog1337 can be set to execute a custom commands.
+Currently they can be invoked for every host status update (up/down) and after each ping round.
 
-Make sure you get the formatting and necessary escapes right, otherwise Watchdog1337 won't work.
-Study the Watchdog1337.sh sourcecode to find variables
-that might be interesting in combination with CUSTOMCMD
+Examples are provided in settings.cfg, and are by default compatible with included plugins
+WDMap and WDAlerts.
 
 
 Technical details:
