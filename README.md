@@ -12,6 +12,8 @@ Watchdog1337 is licensed under CC BY-NC-SA 3.0.
 What is Watchdog1337?
 ---------------------
 
+![Watchdog 1337](https://camo.githubusercontent.com/974fd62bdc54f838c26bf95fd90684732e03644b/687474703a2f2f692e696d6775722e636f6d2f553535386d73642e6a7067)
+
 Watchdog1337 is a simple network monitoring script written in bash. 
 It pings the desired hosts in a fixed time interval and displays the status. 
 If there are 10 or less hosts, the output fits nicely within a standard 80x24 terminal window.
