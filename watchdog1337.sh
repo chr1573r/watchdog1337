@@ -133,14 +133,15 @@ gfx () # Used to display repeating "graphics" where needed
 
 timeupdate() # Sets current time into different variables. Used for timestamping etc.
 {
-	export DATE=$(date +"%d-%m-%Y")
-	export UNIXSTAMP=$(date +%s)
-	export NOWSTAMP=$(date +"%Hh%Mm%Ss")
-	export HM=$(date +"%R")
-	export HMS=$(date +"%R:%S")
-	export HOUR=$(date +"%H")
-	export MINUTE=$(date +"%M")
-	export SEC=$(date +"%S")
+	now=$(date -u +%s)
+	export DATE=$(date -d @$now +"%d-%m-%Y")
+	export UNIXSTAMP=$(date -d @$now +%s)
+	export NOWSTAMP=$(date -d @$now +"%Hh%Mm%Ss")
+	export HM=$(date -d @$now +"%R")
+	export HMS=$(date -d @$now +"%R:%S")
+	export HOUR=$(date -d @$now +"%H")
+	export MINUTE=$(date -d @$now +"%M")
+	export SEC=$(date -d @$now +"%S")
 }
 
 printheader() # Draw the header (column labels)
