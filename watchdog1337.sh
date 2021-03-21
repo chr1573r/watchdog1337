@@ -24,8 +24,20 @@ export RED="\x1b[31;11m"
 export LIGHTYELLOW="\x1b[33;01m"
 export YELLOW="\x1b[33;11m"
 
+case $(uname -a) in
+	Darwin*|*BSD*)
+		OS_FLAVOR=unix
+		date_opt='-r '
+		;;
+	*)
+		OS_FLAVOR=linux
+		date_opt='-d @'
+		;;
+esac
 
 ######
+
+
 
 ### Default/failover theme palette:
 
@@ -134,14 +146,14 @@ gfx () # Used to display repeating "graphics" where needed
 timeupdate() # Sets current time into different variables. Used for timestamping etc.
 {
 	now=$(date -u +%s)
-	export DATE=$(date -d @$now +"%d-%m-%Y")
-	export UNIXSTAMP=$(date -d @$now +%s)
-	export NOWSTAMP=$(date -d @$now +"%Hh%Mm%Ss")
-	export HM=$(date -d @$now +"%R")
-	export HMS=$(date -d @$now +"%R:%S")
-	export HOUR=$(date -d @$now +"%H")
-	export MINUTE=$(date -d @$now +"%M")
-	export SEC=$(date -d @$now +"%S")
+	export DATE=$(date ${date_opt}$now +"%d-%m-%Y")
+	export UNIXSTAMP=$(date ${date_opt}$now +%s)
+	export NOWSTAMP=$(date ${date_opt}$now +"%Hh%Mm%Ss")
+	export HM=$(date ${date_opt}$now +"%R")
+	export HMS=$(date ${date_opt}$now +"%R:%S")
+	export HOUR=$(date ${date_opt}$now +"%H")
+	export MINUTE=$(date ${date_opt}$now +"%M")
+	export SEC=$(date ${date_opt}$now +"%S")
 }
 
 printheader() # Draw the header (column labels)
